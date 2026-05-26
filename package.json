@@ -1,0 +1,21 @@
+{
+  "name": "generational-wealth-roadmap",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "WGRALGO / The Wealth Gap Resolution Algorithm Inc.",
+  "license": "GPL-3.0-or-later",
+  "description": "Generational Wealth Roadmap — offline educational Android app from WGRALGO. Life-stage financial decision game packaged with Capacitor 6.",
+  "dependencies": {
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/cli": "^6.2.1",
+    "@capacitor/core": "^6.2.1",
+    "@capacitor/splash-screen": "^6.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5"
+  }
+}

@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#000000" />
+<title>Generational Wealth Roadmap</title>
+<style>
+  :root {
+    --gold: #d4af37;
+    --gold-soft: #f5e4b3;
+    --gold-deep: #a8862a;
+    --bg: #000000;
+    --panel: #0c0c0c;
+    --panel-2: #141414;
+    --border: rgba(212, 175, 55, 0.55);
+    --border-strong: #d4af37;
+    --text: #f5f5f5;
+    --muted: #b9b9b9;
+    --green: #22c55e;
+    --green-bg: rgba(34, 197, 94, 0.12);
+    --red: #ef4444;
+    --red-bg: rgba(239, 68, 68, 0.12);
+    --shadow-gold: 0 0 0 1px rgba(212,175,55,0.35), 0 10px 30px rgba(212,175,55,0.08);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
+    padding-top: calc(16px + env(safe-area-inset-top));
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 4px 14px;
+    border-bottom: 1px solid rgba(212,175,55,0.18);
+    margin-bottom: 16px;
+  }
+  .topbar .logo {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: #000; padding: 0;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .topbar .logo img { width: 100%; height: 100%; object-fit: cover; }
+  .topbar .title-block { display: flex; flex-direction: column; line-height: 1.05; }
+  .topbar .title { font-weight: 800; color: var(--gold); font-size: 16px; letter-spacing: 0.5px; }
+  .topbar .subtitle { color: var(--muted); font-size: 12px; margin-top: 3px; }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .hero {
+    background: linear-gradient(180deg, #0a0a0a, #060606);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px 18px 24px;
+    box-shadow: var(--shadow-gold);
+    text-align: center;
+  }
+  .hero .emblem {
+    width: 132px; height: 132px;
+    border-radius: 24px;
+    margin: 4px auto 14px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero .emblem img { width: 100%; height: 100%; object-fit: cover; }
+  .hero h1 {
+    color: var(--gold);
+    font-size: 24px;
+    margin: 4px 0 6px;
+    letter-spacing: 0.4px;
+  }
+  .hero .tag {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 4px 6px 18px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 16px;
+    border: 1px solid var(--border);
+    background: #0b0b0b;
+    color: var(--text);
+    cursor: pointer;
+    transition: transform .08s ease, background .15s ease, box-shadow .15s ease, border-color .15s ease;
+    text-align: center;
+    line-height: 1.25;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn.gold {
+    background: linear-gradient(180deg, #d4af37, #a8862a);
+    color: #000;
+    border-color: var(--gold-soft);
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.5), 0 8px 22px rgba(212,175,55,0.18);
+  }
+  .btn.gold:hover { box-shadow: 0 0 18px rgba(212,175,55,0.55); }
+  .btn.ghost { background: transparent; color: var(--gold-soft); }
+  .btn + .btn { margin-top: 10px; }
+
+  .section-title {
+    color: var(--gold);
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    margin: 18px 4px 8px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: var(--shadow-gold);
+  }
+  .card + .card { margin-top: 12px; }
+
+  .stage-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; margin-bottom: 10px;
+  }
+  .stage-head .stage-num {
+    color: var(--gold); font-weight: 800; font-size: 13px;
+    letter-spacing: 1.2px; text-transform: uppercase;
+  }
+  .stage-head .stage-progress {
+    color: var(--muted); font-size: 12px;
+  }
+  .stage h2 {
+    color: var(--gold-soft);
+    font-size: 19px;
+    margin: 2px 0 8px;
+    line-height: 1.25;
+  }
+  .stage .scenario {
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 4px 0 14px;
+  }
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice {
+    background: var(--panel-2);
+    border: 1px solid rgba(212,175,55,0.35);
+    color: var(--text);
+    padding: 13px 14px;
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: border-color .15s, background .15s, box-shadow .15s;
+  }
+  .choice:hover { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(212,175,55,0.35); }
+  .choice .lead { color: var(--gold-soft); font-weight: 700; margin-right: 6px; }
+  .choice.selected { border-color: var(--gold); background: rgba(212,175,55,0.08); }
+
+  .feedback {
+    margin-top: 14px;
+    border-radius: 14px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    background: #090909;
+  }
+  .feedback.good { border-color: rgba(34,197,94,0.55); background: var(--green-bg); }
+  .feedback.bad  { border-color: rgba(239,68,68,0.55);  background: var(--red-bg); }
+  .feedback .fb-title { font-weight: 800; margin-bottom: 6px; }
+  .feedback.good .fb-title { color: #86efac; }
+  .feedback.bad  .fb-title { color: #fca5a5; }
+  .feedback .fb-body { color: var(--text); font-size: 14px; line-height: 1.55; }
+  .feedback .lesson {
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px dashed rgba(212,175,55,0.35);
+    color: var(--gold-soft); font-size: 13px;
+  }
+  .feedback .lesson b { color: var(--gold); }
+
+  .metrics-card { margin-top: 12px; }
+  .metrics-card h3 {
+    margin: 0 0 10px; font-size: 13px;
+    color: var(--gold); text-transform: uppercase; letter-spacing: 1.2px;
+  }
+  .metrics-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px;
+  }
+  .metric { display: flex; flex-direction: column; gap: 4px; }
+  .metric .row { display: flex; justify-content: space-between; font-size: 12px; }
+  .metric .label { color: var(--muted); }
+  .metric .val   { color: var(--text); font-weight: 700; }
+  .bar {
+    height: 7px; background: rgba(255,255,255,0.07); border-radius: 999px;
+    overflow: hidden; border: 1px solid rgba(212,175,55,0.18);
+  }
+  .bar .fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+    transition: width .35s ease;
+  }
+  .bar.good .fill { background: linear-gradient(90deg, #15803d, var(--green)); }
+  .bar.bad  .fill { background: linear-gradient(90deg, #991b1b, var(--red)); }
+
+  .progress-strip {
+    margin-top: 12px;
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(212,175,55,0.18);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-strip .pf {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+    transition: width .3s ease;
+  }
+
+  .nav-row { display: flex; gap: 10px; margin-top: 14px; }
+  .nav-row .btn { flex: 1; }
+
+  .results .rating-badge {
+    display: inline-block; margin: 4px 0 12px;
+    padding: 6px 14px; border-radius: 999px;
+    background: linear-gradient(180deg, #d4af37, #a8862a);
+    color: #000; font-weight: 800; letter-spacing: 0.8px;
+    border: 1px solid var(--gold-soft);
+  }
+  .results .summary {
+    color: var(--text); font-size: 14px; line-height: 1.6;
+    background: #090909; border: 1px solid var(--border);
+    padding: 12px 14px; border-radius: 12px; margin-top: 8px;
+  }
+  .results .lessons { margin-top: 12px; }
+  .results .lessons h3 {
+    color: var(--gold); font-size: 13px; text-transform: uppercase;
+    letter-spacing: 1.2px; margin: 0 0 6px;
+  }
+  .results .lessons ul { margin: 0; padding-left: 20px; }
+  .results .lessons li { color: var(--gold-soft); margin: 6px 0; line-height: 1.5; }
+
+  .disclaimer {
+    color: var(--muted); font-size: 11px; line-height: 1.55;
+    margin: 16px 4px 0;
+  }
+
+  .how-list { padding-left: 18px; margin: 6px 0 0; }
+  .how-list li { color: var(--text); margin: 7px 0; line-height: 1.55; font-size: 14px; }
+
+  @media (min-width: 700px) {
+    .metrics-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .hero h1 { font-size: 28px; }
+    .hero .tag { font-size: 15px; }
+    .stage h2 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="logo"><img src="img/logo.png" alt="" /></div>
+    <div class="title-block">
+      <div class="title">GENERATIONAL WEALTH ROADMAP&trade;</div>
+      <div class="subtitle">WGRALGO offline financial decision game</div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <section id="screen-home" class="screen active">
+    <div class="hero">
+      <div class="emblem"><img src="img/logo.png" alt="" /></div>
+      <h1>Generational Wealth Roadmap&trade;</h1>
+      <div class="tag">
+        Walk through life stages, make real-world money decisions,
+        and see how your choices shape a long-term family wealth story.
+      </div>
+      <button class="btn gold" id="btn-start">Choose a Path</button>
+      <button class="btn ghost" id="btn-how">How It Works</button>
+    </div>
+    <div class="disclaimer">
+      Educational awareness only. Not legal, financial, tax, investment,
+      estate planning, credit, lending, or professional advice. For
+      personal financial decisions, consult a qualified professional.
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="screen-how" class="screen">
+    <div class="card">
+      <div class="section-title" style="margin-top:0">How It Works</div>
+      <ol class="how-list">
+        <li>You walk through 12 life stages, from money mindset to legacy planning.</li>
+        <li>Each stage gives a short scenario and 3 realistic choices.</li>
+        <li>Every choice updates 7 metrics: Wealth Score, Emergency Fund, Credit Health, Debt Risk, Investment Growth, Family Stability, Legacy Impact.</li>
+        <li>You see immediate feedback and a short money lesson.</li>
+        <li>At the end you get a Family Wealth Story, rating, strongest and weakest category, and 3 personalized lessons.</li>
+      </ol>
+      <div style="margin-top:14px">
+        <button class="btn gold" id="btn-how-start">Start the Roadmap</button>
+        <button class="btn ghost" id="btn-how-back">Back</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE -->
+  <section id="screen-stage" class="screen">
+    <div class="card stage" id="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="stage-num">Stage 1 of 12</div>
+        <div class="stage-progress" id="stage-progress">Wealth Score 50</div>
+      </div>
+      <h2 id="stage-title">Stage title</h2>
+      <div class="scenario" id="stage-scenario">Scenario text...</div>
+      <div class="choices" id="stage-choices"></div>
+
+      <div id="stage-feedback" class="feedback" style="display:none"></div>
+
+      <div class="progress-strip"><div class="pf" id="progress-fill"></div></div>
+
+      <div class="nav-row">
+        <button class="btn ghost" id="btn-restart">Restart</button>
+        <button class="btn gold" id="btn-next" disabled>Next Stage</button>
+      </div>
+    </div>
+
+    <div class="card metrics-card">
+      <h3>Your Long-Term Story</h3>
+      <div class="metrics-grid" id="metrics-grid"></div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="screen-results" class="screen">
+    <div class="card results">
+      <div class="section-title" style="margin-top:0">Final Family Wealth Story</div>
+      <div class="rating-badge" id="rating-badge">Wealth Strategist</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:6px">
+        Final Wealth Score: <span id="final-score" style="color:var(--gold);font-weight:800">0</span> / 100
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">
+        Strongest area: <b id="best-cat" style="color:var(--gold-soft)">-</b>
+        &nbsp;&middot;&nbsp;
+        Weakest area: <b id="worst-cat" style="color:var(--gold-soft)">-</b>
+      </div>
+      <div class="summary" id="result-summary"></div>
+      <div class="lessons">
+        <h3>3 Lessons For You</h3>
+        <ul id="result-lessons"></ul>
+      </div>
+
+      <div class="metrics-card" style="margin-top:14px;">
+        <h3 style="color:var(--gold);font-size:13px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 10px;">Final Metrics</h3>
+        <div class="metrics-grid" id="metrics-grid-final"></div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn ghost" id="btn-results-home">Home</button>
+        <button class="btn gold" id="btn-play-again">Play Again</button>
+      </div>
+    </div>
+    <div class="disclaimer">
+      Educational awareness only. Not legal, financial, tax, investment,
+      estate planning, credit, lending, or professional advice. For
+      personal financial decisions, consult a qualified professional.
+    </div>
+  </section>
+
+</div>
+
+<script>
+const METRICS = [
+  { key: 'wealth',    label: 'Wealth Score',      lowerBetter: false },
+  { key: 'emergency', label: 'Emergency Fund',    lowerBetter: false },
+  { key: 'credit',    label: 'Credit Health',     lowerBetter: false },
+  { key: 'debt',      label: 'Debt Risk',         lowerBetter: true  },
+  { key: 'invest',    label: 'Investment Growth', lowerBetter: false },
+  { key: 'family',    label: 'Family Stability',  lowerBetter: false },
+  { key: 'legacy',    label: 'Legacy Impact',     lowerBetter: false },
+];
+
+const STAGES = [
+  {
+    title: 'Starting Point: Money Mindset',
+    scenario: 'You are setting your first money goals. How will you think about wealth?',
+    choices: [
+      { text: 'Wealth is a long game. I will build steady habits and learn as I go.',
+        good: true,
+        feedback: 'Strong start. A long-term mindset survives bad months and bad markets.',
+        lesson: 'Patience plus consistency beats short bursts of effort.',
+        deltas: { wealth:+5, family:+3, legacy:+3 } },
+      { text: 'Wealth is luck. I will spend what I have and hope for a big break.',
+        good: false,
+        feedback: 'A break may never come. Hope alone is not a plan.',
+        lesson: 'Plans beat luck. Habits beat moods.',
+        deltas: { wealth:-5, emergency:-3, debt:+5 } },
+      { text: 'I will copy what looks rich on social media, even if I cannot afford it.',
+        good: false,
+        feedback: 'Image-driven spending burns money fast and teaches the wrong lessons.',
+        lesson: 'Looking wealthy and being wealthy are very different things.',
+        deltas: { wealth:-6, debt:+8, family:-2 } },
+    ],
+  },
+  {
+    title: 'Education and Skill Building',
+    scenario: 'You can spend free time on a new skill or stick with what you have.',
+    choices: [
+      { text: 'Take a free online course in a skill that pays better.',
+        good: true,
+        feedback: 'Skill growth raises future income without big upfront cost.',
+        lesson: 'Cheap learning today can raise your ceiling for decades.',
+        deltas: { wealth:+5, invest:+3, family:+2, legacy:+2 } },
+      { text: 'Take an expensive course on credit with no clear payoff plan.',
+        good: false,
+        feedback: 'Borrowed money for vague skills is a slow leak.',
+        lesson: 'Match the cost of learning to the income it will realistically add.',
+        deltas: { debt:+7, wealth:-3 } },
+      { text: 'Skip learning. The job I have is good enough forever.',
+        good: false,
+        feedback: 'Industries shift. Skills age. Standing still is going backward.',
+        lesson: 'Your earning power needs maintenance like a car needs oil.',
+        deltas: { wealth:-3, invest:-3, legacy:-2 } },
+    ],
+  },
+  {
+    title: 'First Job: Income Choices',
+    scenario: 'You finally get a steady paycheck. What do you do first?',
+    choices: [
+      { text: 'Open a checking and a savings account, automate a small transfer.',
+        good: true,
+        feedback: 'Automation removes willpower from the equation.',
+        lesson: 'Pay yourself first. The number is less important than the habit.',
+        deltas: { wealth:+4, emergency:+8, family:+2 } },
+      { text: 'Spend most of it on a lifestyle upgrade to celebrate.',
+        good: false,
+        feedback: 'A small celebration is fine. A full lifestyle reset on day one is risky.',
+        lesson: 'Lifestyle creep eats raises before they ever reach your savings.',
+        deltas: { emergency:-6, debt:+4, wealth:-2 } },
+      { text: 'Cash the check and keep it under the mattress.',
+        good: false,
+        feedback: 'Cash at home loses to inflation and can be lost or stolen.',
+        lesson: 'A boring bank account beats a creative hiding place.',
+        deltas: { emergency:-3, wealth:-2 } },
+    ],
+  },
+  {
+    title: 'Budgeting and Emergency Fund',
+    scenario: 'A friend invites you to a weekend trip. You have no emergency fund.',
+    choices: [
+      { text: 'Skip the trip. Start building a starter emergency fund instead.',
+        good: true,
+        feedback: 'Boring choice today, calm choice when the car breaks down later.',
+        lesson: 'An emergency fund is insurance against panic decisions.',
+        deltas: { emergency:+10, family:+3, debt:-2 } },
+      { text: 'Go on the trip and put it on a credit card you cannot pay off this month.',
+        good: false,
+        feedback: 'Memories on revolving debt are very expensive memories.',
+        lesson: 'High-interest debt turns one weekend into months of cleanup.',
+        deltas: { debt:+10, credit:-5, wealth:-4 } },
+      { text: 'Go but only spend cash you already saved for fun money.',
+        good: true,
+        feedback: 'Fun and budget can coexist when you plan ahead.',
+        lesson: 'A budget is not a no. It is a where and when.',
+        deltas: { family:+3, wealth:+1, emergency:-2 } },
+    ],
+  },
+  {
+    title: 'Credit and Debt Decisions',
+    scenario: 'You qualify for a higher credit limit. What is your move?',
+    choices: [
+      { text: 'Accept the higher limit but keep my spending the same.',
+        good: true,
+        feedback: 'More limit, same spending lowers your utilization ratio.',
+        lesson: 'Credit health rewards restraint, not access.',
+        deltas: { credit:+8, debt:-2, wealth:+2 } },
+      { text: 'Accept and treat it as free money to celebrate.',
+        good: false,
+        feedback: 'A credit limit is not income. It is a loan offer.',
+        lesson: 'Borrowing for celebrations is the most expensive way to celebrate.',
+        deltas: { debt:+10, credit:-6, emergency:-4 } },
+      { text: 'Refuse the offer and avoid using credit cards at all.',
+        good: false,
+        feedback: 'Avoidance is safer than overuse but slows credit history.',
+        lesson: 'Light, on-time use of credit builds a stronger file than total avoidance.',
+        deltas: { credit:-3, wealth:-1 } },
+    ],
+  },
+  {
+    title: 'Housing Choices',
+    scenario: 'You are tired of renting. Friends say you should buy now.',
+    choices: [
+      { text: 'Rent a modest place and build a down payment and emergency fund first.',
+        good: true,
+        feedback: 'A boring rental with money in the bank beats a stressful mortgage.',
+        lesson: 'A home only builds wealth if it does not break your budget.',
+        deltas: { emergency:+8, wealth:+3, family:+3 } },
+      { text: 'Buy at the top of my budget with a low down payment.',
+        good: false,
+        feedback: 'A thin down payment plus high payments plus repairs equals stress.',
+        lesson: 'A mortgage you can barely afford is a luxury you cannot really afford.',
+        deltas: { debt:+10, emergency:-8, family:-3 } },
+      { text: 'Move in with family for a year to save aggressively.',
+        good: true,
+        feedback: 'Short-term discomfort can fund a long-term advantage.',
+        lesson: 'Lower housing costs are the fastest legal way to save more.',
+        deltas: { emergency:+12, wealth:+4, family:+2 } },
+    ],
+  },
+  {
+    title: 'Investing and Retirement',
+    scenario: 'Your job offers a retirement plan with an employer match.',
+    choices: [
+      { text: 'Contribute at least enough to get the full match.',
+        good: true,
+        feedback: 'The employer match is one of the few real free returns in finance.',
+        lesson: 'Free match money compounds for decades. Take it.',
+        deltas: { invest:+12, wealth:+6, legacy:+4 } },
+      { text: 'Skip it because retirement is far away.',
+        good: false,
+        feedback: 'Time is the cheat code of investing. Skipping it leaves money on the table.',
+        lesson: 'Decades of compounding lost cannot be replaced later.',
+        deltas: { invest:-8, legacy:-5, wealth:-3 } },
+      { text: 'Put it all in one risky stock a coworker recommended.',
+        good: false,
+        feedback: 'Concentrated bets can win, but they can also wipe out your retirement.',
+        lesson: 'Diversification is how regular people stay in the game.',
+        deltas: { invest:-6, debt:+3, wealth:-3 } },
+    ],
+  },
+  {
+    title: 'Family Support and Household Stability',
+    scenario: 'A close family member asks for a large loan you cannot really afford.',
+    choices: [
+      { text: 'Offer a smaller gift you can afford and discuss a longer plan.',
+        good: true,
+        feedback: 'Real support fits inside your own stability.',
+        lesson: 'You cannot rescue anyone from inside a sinking boat.',
+        deltas: { family:+6, wealth:+1, emergency:-2 } },
+      { text: 'Drain my emergency fund to give them the full amount.',
+        good: false,
+        feedback: 'Empty emergency funds usually lead to new debt within months.',
+        lesson: 'Generosity without limits often turns into shared crisis.',
+        deltas: { emergency:-12, family:+3, debt:+5 } },
+      { text: 'Refuse with no conversation and cut contact.',
+        good: false,
+        feedback: 'Silence damages the relationship more than the no would.',
+        lesson: 'Honest no plus honest reason protects both the money and the bond.',
+        deltas: { family:-7, legacy:-3 } },
+    ],
+  },
+  {
+    title: 'Entrepreneurship or Career Growth',
+    scenario: 'You have an idea for a small side business. How do you start?',
+    choices: [
+      { text: 'Start small on nights and weekends while keeping the main job.',
+        good: true,
+        feedback: 'Validated demand before quitting is much safer than betting blind.',
+        lesson: 'Side income is allowed to be small while it learns to walk.',
+        deltas: { wealth:+5, invest:+3, family:+2 } },
+      { text: 'Quit my job and put my last savings into the idea.',
+        good: false,
+        feedback: 'No runway and no proof equals very high failure risk.',
+        lesson: 'Bet the smallest amount that can still teach you what you need to know.',
+        deltas: { emergency:-10, debt:+8, family:-3 } },
+      { text: 'Take a high-interest loan to launch big with ads on day one.',
+        good: false,
+        feedback: 'Loud launches with no product fit can lose money even faster.',
+        lesson: 'Marketing cannot fix a product that nobody actually wants.',
+        deltas: { debt:+12, wealth:-4, credit:-4 } },
+    ],
+  },
+  {
+    title: 'Crisis: Unexpected Expense',
+    scenario: 'Your car needs a repair that is more than your spending budget allows.',
+    choices: [
+      { text: 'Pay from my emergency fund and rebuild it over the next few months.',
+        good: true,
+        feedback: 'That is exactly what an emergency fund is for.',
+        lesson: 'A used emergency fund did its job. A debt-fueled fix creates a new problem.',
+        deltas: { emergency:-8, debt:-2, family:+3, wealth:+1 } },
+      { text: 'Put the full repair on a high-interest credit card.',
+        good: false,
+        feedback: 'A short repair becomes a long interest payment.',
+        lesson: 'Plastic for emergencies is convenient and expensive.',
+        deltas: { debt:+10, credit:-5, wealth:-3 } },
+      { text: 'Skip the repair and risk a bigger breakdown later.',
+        good: false,
+        feedback: 'Postponed maintenance is one of the most common ways small bills become huge ones.',
+        lesson: 'Cheap fix now beats expensive replacement later.',
+        deltas: { family:-4, wealth:-4, debt:+5 } },
+    ],
+  },
+  {
+    title: 'Lifestyle and Raises',
+    scenario: 'You get a raise at work. What do you do with the extra income?',
+    choices: [
+      { text: 'Send most of the raise straight to savings and investing.',
+        good: true,
+        feedback: 'Banking raises is one of the simplest wealth-building moves.',
+        lesson: 'You already lived without it. Let your future self enjoy it.',
+        deltas: { wealth:+6, invest:+6, emergency:+4, legacy:+3 } },
+      { text: 'Upgrade my car, my apartment, and my subscriptions immediately.',
+        good: false,
+        feedback: 'A bigger lifestyle on a small cushion is fragile.',
+        lesson: 'Lifestyle inflation quietly cancels every raise you will ever earn.',
+        deltas: { debt:+8, emergency:-6, wealth:-3 } },
+      { text: 'Split the raise: half to savings, a little for fun, a little for family.',
+        good: true,
+        feedback: 'Balanced choices keep both your numbers and your mood healthy.',
+        lesson: 'A plan that includes joy is a plan you will actually follow.',
+        deltas: { wealth:+3, family:+3, emergency:+2 } },
+    ],
+  },
+  {
+    title: 'Legacy Planning',
+    scenario: 'You think about what to pass on to the next generation.',
+    choices: [
+      { text: 'Teach money basics, set up a will, and keep paperwork organized.',
+        good: true,
+        feedback: 'Knowledge and clear paperwork protect a family more than a big surprise check.',
+        lesson: 'Legacy is mostly clarity, calm, and skills, not a single big number.',
+        deltas: { legacy:+12, family:+6, wealth:+2 } },
+      { text: 'Plan to spend every dollar on myself and skip planning.',
+        good: false,
+        feedback: 'No plan plus no documents equals chaos for everyone you leave behind.',
+        lesson: 'A weekend of planning prevents years of conflict.',
+        deltas: { legacy:-10, family:-5 } },
+      { text: 'Promise a huge inheritance with no plan to actually fund it.',
+        good: false,
+        feedback: 'Promises without funding turn into broken trust.',
+        lesson: 'Smaller, real legacy beats giant, imaginary legacy every time.',
+        deltas: { legacy:-6, family:-3, wealth:-2 } },
+    ],
+  },
+];
+
+const startMetrics = { wealth:50, emergency:30, credit:50, debt:40, invest:30, family:60, legacy:30 };
+let metrics, stageIdx, picks;
+
+function resetGame() { metrics = Object.assign({}, startMetrics); stageIdx = 0; picks = []; }
+function clamp(n) { return Math.max(0, Math.min(100, n)); }
+function applyDeltas(d) { for (const k in d) if (k in metrics) metrics[k] = clamp(metrics[k] + d[k]); }
+function metricGoodness(key, val) {
+  const def = METRICS.find(m => m.key === key);
+  return def && def.lowerBetter ? 100 - val : val;
+}
+
+function show(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function renderMetrics(targetId) {
+  const grid = document.getElementById(targetId);
+  grid.innerHTML = '';
+  for (const m of METRICS) {
+    const val = metrics[m.key];
+    const good = metricGoodness(m.key, val);
+    const cls = good >= 60 ? 'good' : good <= 35 ? 'bad' : '';
+    const valLabel = m.lowerBetter ? `${val} (lower = better)` : `${val}`;
+    grid.insertAdjacentHTML('beforeend',
+      `<div class="metric">
+        <div class="row"><span class="label">${m.label}</span><span class="val">${valLabel}</span></div>
+        <div class="bar ${cls}"><div class="fill" style="width:${good}%"></div></div>
+      </div>`);
+  }
+}
+
+function renderStage() {
+  const s = STAGES[stageIdx];
+  document.getElementById('stage-num').textContent = `Stage ${stageIdx + 1} of ${STAGES.length}`;
+  document.getElementById('stage-progress').textContent = `Wealth Score ${metrics.wealth}`;
+  document.getElementById('stage-title').textContent = s.title;
+  document.getElementById('stage-scenario').textContent = s.scenario;
+
+  const ch = document.getElementById('stage-choices');
+  ch.innerHTML = '';
+  s.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'choice';
+    btn.innerHTML = `<span class="lead">${String.fromCharCode(65 + i)}.</span>${c.text}`;
+    btn.addEventListener('click', () => pickChoice(i, btn));
+    ch.appendChild(btn);
+  });
+
+  document.getElementById('stage-feedback').style.display = 'none';
+  document.getElementById('btn-next').disabled = true;
+  document.getElementById('btn-next').textContent = stageIdx === STAGES.length - 1 ? 'See Results' : 'Next Stage';
+  document.getElementById('progress-fill').style.width = `${(stageIdx / STAGES.length) * 100}%`;
+  renderMetrics('metrics-grid');
+}
+
+function pickChoice(i, btnEl) {
+  const s = STAGES[stageIdx];
+  const c = s.choices[i];
+  document.querySelectorAll('#stage-choices .choice').forEach(b => {
+    b.disabled = true; b.style.opacity = '0.6'; b.style.cursor = 'default';
+  });
+  btnEl.classList.add('selected'); btnEl.style.opacity = '1';
+
+  applyDeltas(c.deltas);
+  picks.push({ stage: s.title, choice: c.text, good: c.good });
+
+  const fb = document.getElementById('stage-feedback');
+  fb.className = 'feedback ' + (c.good ? 'good' : 'bad');
+  fb.style.display = 'block';
+  fb.innerHTML =
+    `<div class="fb-title">${c.good ? 'Smart move' : 'Risky move'}</div>` +
+    `<div class="fb-body">${c.feedback}</div>` +
+    `<div class="lesson"><b>Money lesson:</b> ${c.lesson}</div>`;
+
+  document.getElementById('stage-progress').textContent = `Wealth Score ${metrics.wealth}`;
+  document.getElementById('progress-fill').style.width = `${((stageIdx + 1) / STAGES.length) * 100}%`;
+  document.getElementById('btn-next').disabled = false;
+  renderMetrics('metrics-grid');
+}
+
+function goNext() {
+  if (stageIdx >= STAGES.length - 1) showResults();
+  else { stageIdx++; renderStage(); }
+}
+
+function ratingFor(score) {
+  if (score >= 90) return 'Legacy Builder';
+  if (score >= 75) return 'Wealth Strategist';
+  if (score >= 60) return 'Foundation Builder';
+  if (score >= 40) return 'Still Building';
+  return 'Restart the Roadmap';
+}
+
+function pickBestWorst() {
+  let best = null, worst = null;
+  for (const m of METRICS) {
+    const g = metricGoodness(m.key, metrics[m.key]);
+    if (best === null || g > best.g)  best  = { label: m.label, g };
+    if (worst === null || g < worst.g) worst = { label: m.label, g };
+  }
+  return { best, worst };
+}
+
+function lessonsFromPicks() {
+  const goodPicks = picks.filter(p => p.good).length;
+  const out = [];
+  if (goodPicks >= STAGES.length - 2) {
+    out.push('You stayed disciplined in almost every stage. Now focus on widening the income side, not just the saving side.');
+  } else if (goodPicks <= 3) {
+    out.push('Most setbacks came from chasing comfort or status now. A written budget and a small emergency fund target will reset the story.');
+  } else {
+    out.push('You mixed strong moves with weaker ones. Pick the two metrics that scored lowest and protect them first next time.');
+  }
+  const { best, worst } = pickBestWorst();
+  out.push(`Your strongest area is ${best.label}. Use it as the anchor of your money plan instead of starting over each time.`);
+  out.push(`Your weakest area is ${worst.label}. Pick one small, specific habit this month that improves only that one number.`);
+  return out;
+}
+
+function showResults() {
+  const wealth = metrics.wealth;
+  document.getElementById('final-score').textContent = wealth;
+  document.getElementById('rating-badge').textContent = ratingFor(wealth);
+
+  const { best, worst } = pickBestWorst();
+  document.getElementById('best-cat').textContent = best.label;
+  document.getElementById('worst-cat').textContent = worst.label;
+
+  const goodPicks = picks.filter(p => p.good).length;
+  const story = `Across 12 life stages you made ${goodPicks} disciplined ` +
+    `choice${goodPicks === 1 ? '' : 's'} and ${STAGES.length - goodPicks} riskier one${(STAGES.length - goodPicks) === 1 ? '' : 's'}. ` +
+    `Your family wealth story ends as a ${ratingFor(wealth)}, anchored by ${best.label} ` +
+    `and held back most by ${worst.label}. The roadmap is never finished &mdash; small, ` +
+    `repeatable habits compound into a different ending each round.`;
+  document.getElementById('result-summary').innerHTML = story;
+
+  const ul = document.getElementById('result-lessons');
+  ul.innerHTML = '';
+  for (const l of lessonsFromPicks()) {
+    const li = document.createElement('li');
+    li.textContent = l;
+    ul.appendChild(li);
+  }
+
+  renderMetrics('metrics-grid-final');
+  show('screen-results');
+}
+
+document.getElementById('btn-start').addEventListener('click', () => {
+  resetGame(); renderStage(); show('screen-stage');
+});
+document.getElementById('btn-how').addEventListener('click', () => show('screen-how'));
+document.getElementById('btn-how-back').addEventListener('click', () => show('screen-home'));
+document.getElementById('btn-how-start').addEventListener('click', () => {
+  resetGame(); renderStage(); show('screen-stage');
+});
+document.getElementById('btn-next').addEventListener('click', goNext);
+document.getElementById('btn-restart').addEventListener('click', () => {
+  resetGame(); renderStage();
+});
+document.getElementById('btn-play-again').addEventListener('click', () => {
+  resetGame(); renderStage(); show('screen-stage');
+});
+document.getElementById('btn-results-home').addEventListener('click', () => {
+  show('screen-home');
+});
+
+resetGame();
+</script>
+</body>
+</html>

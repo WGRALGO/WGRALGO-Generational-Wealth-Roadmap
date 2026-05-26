@@ -1,0 +1,46 @@
+# --- Android / Gradle build output ---
+.gradle/
+build/
+android/build/
+android/app/build/
+android/capacitor-cordova-android-plugins/build/
+android/.gradle/
+android/app/release/
+android/app/debug/
+*.apk
+*.aab
+*.ap_
+*.dex
+captures/
+.externalNativeBuild/
+.cxx/
+
+# --- Signing / secrets (NEVER commit) ---
+local.properties
+android/local.properties
+keystore.properties
+android/keystore.properties
+*.jks
+*.keystore
+*.p12
+*.pepk
+release-signing/
+signing/
+
+# --- Node ---
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# --- Dist / build artifacts ---
+dist/
+www/build/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+*~
+*.swp
+.idea/
+*.iml
+.vscode/

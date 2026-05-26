@@ -1,0 +1,13 @@
+{
+  "appId": "org.wgralgo.generationalwealthroadmap",
+  "appName": "Generational Wealth Roadmap",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "backgroundColor": "#000000",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false
+    }
+  }
+}
