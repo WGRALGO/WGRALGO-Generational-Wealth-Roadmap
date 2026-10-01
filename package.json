@@ -1,11 +1,21 @@
 {
   "name": "generational-wealth-roadmap",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "2.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "sync": "npx cap sync android",
+    "build:debug": "npx cap sync android && cd android && ./gradlew assembleDebug",
+    "build:release": "npx cap sync android && cd android && ./gradlew assembleRelease",
+    "validate": "bash tools/validate-release.sh"
   },
-  "keywords": [],
+  "keywords": [
+    "android",
+    "capacitor",
+    "education",
+    "generational-wealth",
+    "financial-literacy",
+    "offline",
+    "gplv3"
+  ],
   "author": "WGRALGO / The Wealth Gap Resolution Algorithm Inc.",
   "license": "GPL-3.0-or-later",
   "description": "Generational Wealth Roadmap — offline educational Android app from WGRALGO. Life-stage financial decision game packaged with Capacitor 6.",

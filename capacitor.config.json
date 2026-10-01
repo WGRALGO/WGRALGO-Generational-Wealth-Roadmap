@@ -4,10 +4,15 @@
   "webDir": "www",
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 1500,
+      "launchShowDuration": 600,
       "backgroundColor": "#000000",
       "androidSplashResourceName": "splash",
       "showSpinner": false
     }
+  },
+  "android": {
+    "webContentsDebuggingEnabled": false,
+    "allowMixedContent": false,
+    "backgroundColor": "#000000"
   }
 }

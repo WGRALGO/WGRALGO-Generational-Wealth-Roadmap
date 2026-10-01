@@ -1,835 +1,1611 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
-<meta name="theme-color" content="#000000" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none';">
+<meta name="theme-color" content="#000000">
 <title>Generational Wealth Roadmap</title>
+<!-- Generational Wealth Roadmap — Android app build.
+     Game: the WGRA website version, wrapped in an app shell.
+     No cookies, no trackers, no outside files, nothing saved on the device. -->
 <style>
   :root {
-    --gold: #d4af37;
-    --gold-soft: #f5e4b3;
-    --gold-deep: #a8862a;
-    --bg: #000000;
-    --panel: #0c0c0c;
-    --panel-2: #141414;
-    --border: rgba(212, 175, 55, 0.55);
-    --border-strong: #d4af37;
-    --text: #f5f5f5;
-    --muted: #b9b9b9;
-    --green: #22c55e;
-    --green-bg: rgba(34, 197, 94, 0.12);
-    --red: #ef4444;
-    --red-bg: rgba(239, 68, 68, 0.12);
-    --shadow-gold: 0 0 0 1px rgba(212,175,55,0.35), 0 10px 30px rgba(212,175,55,0.08);
+    --wgra-gold: #d4af37;
+    --wgra-gold-soft: #f5e4b3;
+    --wgra-gold-deep: #b07a12;
+    --wgra-bg-deep: #050505;
+    --wgra-text-main: #fdfaf0;
+    --wgra-text-soft: #f5e4b3;
+    --wgra-good: #31e27f;
+    --wgra-mid: #f5d26a;
+    --wgra-bad: #ff6b6b;
   }
 
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    margin: 0; padding: 0; background: var(--bg); color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    min-height: 100vh;
-    overscroll-behavior: none;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .app {
-    max-width: 760px;
+  .wgra-roadmap-wrapper {
+    max-width: 980px;
     margin: 0 auto;
-    padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
-    padding-top: calc(16px + env(safe-area-inset-top));
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .topbar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 6px 4px 14px;
-    border-bottom: 1px solid rgba(212,175,55,0.18);
-    margin-bottom: 16px;
-  }
-  .topbar .logo {
-    width: 48px; height: 48px; border-radius: 12px;
-    background: #000; padding: 0;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .topbar .logo img { width: 100%; height: 100%; object-fit: cover; }
-  .topbar .title-block { display: flex; flex-direction: column; line-height: 1.05; }
-  .topbar .title { font-weight: 800; color: var(--gold); font-size: 16px; letter-spacing: 0.5px; }
-  .topbar .subtitle { color: var(--muted); font-size: 12px; margin-top: 3px; }
-
-  .screen { display: none; }
-  .screen.active { display: block; }
-
-  .hero {
-    background: linear-gradient(180deg, #0a0a0a, #060606);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 22px 18px 24px;
-    box-shadow: var(--shadow-gold);
-    text-align: center;
-  }
-  .hero .emblem {
-    width: 132px; height: 132px;
-    border-radius: 24px;
-    margin: 4px auto 14px;
-    overflow: hidden;
-    background: #000;
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .hero .emblem img { width: 100%; height: 100%; object-fit: cover; }
-  .hero h1 {
-    color: var(--gold);
-    font-size: 24px;
-    margin: 4px 0 6px;
-    letter-spacing: 0.4px;
-  }
-  .hero .tag {
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 4px 6px 18px;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 14px;
-    font-weight: 700;
+    padding: 40px 20px 60px;
+    box-sizing: border-box;
+    background: radial-gradient(circle at top, #181818 0%, #050505 58%);
+    border-radius: 20px;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.85),
+      0 18px 40px rgba(0,0,0,0.9);
+    color: var(--wgra-text-main);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 16px;
-    border: 1px solid var(--border);
-    background: #0b0b0b;
-    color: var(--text);
-    cursor: pointer;
-    transition: transform .08s ease, background .15s ease, box-shadow .15s ease, border-color .15s ease;
-    text-align: center;
-    line-height: 1.25;
   }
-  .btn:active { transform: translateY(1px); }
-  .btn.gold {
-    background: linear-gradient(180deg, #d4af37, #a8862a);
-    color: #000;
-    border-color: var(--gold-soft);
-    box-shadow: 0 0 0 1px rgba(212,175,55,0.5), 0 8px 22px rgba(212,175,55,0.18);
-  }
-  .btn.gold:hover { box-shadow: 0 0 18px rgba(212,175,55,0.55); }
-  .btn.ghost { background: transparent; color: var(--gold-soft); }
-  .btn + .btn { margin-top: 10px; }
 
-  .section-title {
-    color: var(--gold);
-    font-weight: 800;
+  .wgra-roadmap-header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+
+  .wgra-roadmap-title {
+    font-size: 32px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--wgra-gold-soft);
+    margin: 0 0 8px;
+  }
+
+  .wgra-roadmap-subtitle {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--wgra-text-soft);
+    max-width: 660px;
+    margin: 0 auto;
+  }
+
+  .wgra-roadmap-divider {
+    width: 220px;
+    height: 4px;
+    margin: 20px auto 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--wgra-gold-deep), var(--wgra-gold-soft), var(--wgra-gold), var(--wgra-gold-soft), var(--wgra-gold-deep));
+    background-size: 260% 260%;
+    animation: wgra-roadmap-gold-flow 7s linear infinite;
+  }
+
+  @keyframes wgra-roadmap-gold-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .wgra-roadmap-progress {
+    margin: 4px 0 16px;
     font-size: 14px;
     text-transform: uppercase;
-    letter-spacing: 1.4px;
-    margin: 18px 4px 8px;
+    letter-spacing: 0.08em;
+    text-align: center;
+    color: var(--wgra-text-soft);
   }
 
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: var(--shadow-gold);
+  .wgra-roadmap-card {
+    border-radius: 18px;
+    padding: 22px 18px 18px;
+    background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(8,6,2,0.96));
+    border: 1px solid rgba(212,175,55,0.5);
   }
-  .card + .card { margin-top: 12px; }
 
-  .stage-head {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 10px; margin-bottom: 10px;
+  .wgra-roadmap-card + .wgra-roadmap-card {
+    margin-top: 16px;
   }
-  .stage-head .stage-num {
-    color: var(--gold); font-weight: 800; font-size: 13px;
-    letter-spacing: 1.2px; text-transform: uppercase;
+
+  .wgra-roadmap-h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--wgra-gold-soft);
+    margin: 0 0 6px;
   }
-  .stage-head .stage-progress {
-    color: var(--muted); font-size: 12px;
+
+  .wgra-roadmap-copy {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--wgra-text-soft);
+    margin: 0 0 14px;
   }
-  .stage h2 {
-    color: var(--gold-soft);
-    font-size: 19px;
-    margin: 2px 0 8px;
-    line-height: 1.25;
+
+  /* CHARACTERS */
+  .wgra-roadmap-chars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
   }
-  .stage .scenario {
-    color: var(--text);
-    font-size: 15px;
-    line-height: 1.55;
-    margin: 4px 0 14px;
-  }
-  .choices { display: flex; flex-direction: column; gap: 10px; }
-  .choice {
-    background: var(--panel-2);
-    border: 1px solid rgba(212,175,55,0.35);
-    color: var(--text);
-    padding: 13px 14px;
-    border-radius: 12px;
+
+  .wgra-roadmap-char {
     text-align: left;
-    font-size: 15px;
-    line-height: 1.4;
-    cursor: pointer;
-    transition: border-color .15s, background .15s, box-shadow .15s;
-  }
-  .choice:hover { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(212,175,55,0.35); }
-  .choice .lead { color: var(--gold-soft); font-weight: 700; margin-right: 6px; }
-  .choice.selected { border-color: var(--gold); background: rgba(212,175,55,0.08); }
-
-  .feedback {
-    margin-top: 14px;
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 14px;
-    border: 1px solid var(--border);
-    background: #090909;
+    background: rgba(5,5,5,0.95) !important;
+    border: 1px solid rgba(245,228,179,0.5);
+    color: var(--wgra-text-main) !important;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  .feedback.good { border-color: rgba(34,197,94,0.55); background: var(--green-bg); }
-  .feedback.bad  { border-color: rgba(239,68,68,0.55);  background: var(--red-bg); }
-  .feedback .fb-title { font-weight: 800; margin-bottom: 6px; }
-  .feedback.good .fb-title { color: #86efac; }
-  .feedback.bad  .fb-title { color: #fca5a5; }
-  .feedback .fb-body { color: var(--text); font-size: 14px; line-height: 1.55; }
-  .feedback .lesson {
-    margin-top: 10px; padding-top: 10px;
-    border-top: 1px dashed rgba(212,175,55,0.35);
-    color: var(--gold-soft); font-size: 13px;
-  }
-  .feedback .lesson b { color: var(--gold); }
 
-  .metrics-card { margin-top: 12px; }
-  .metrics-card h3 {
-    margin: 0 0 10px; font-size: 13px;
-    color: var(--gold); text-transform: uppercase; letter-spacing: 1.2px;
+  .wgra-roadmap-char strong {
+    display: block;
+    font-size: 17px;
+    color: var(--wgra-gold-soft);
+    margin-bottom: 4px;
   }
-  .metrics-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px;
-  }
-  .metric { display: flex; flex-direction: column; gap: 4px; }
-  .metric .row { display: flex; justify-content: space-between; font-size: 12px; }
-  .metric .label { color: var(--muted); }
-  .metric .val   { color: var(--text); font-weight: 700; }
-  .bar {
-    height: 7px; background: rgba(255,255,255,0.07); border-radius: 999px;
-    overflow: hidden; border: 1px solid rgba(212,175,55,0.18);
-  }
-  .bar .fill {
-    height: 100%; width: 0%;
-    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
-    transition: width .35s ease;
-  }
-  .bar.good .fill { background: linear-gradient(90deg, #15803d, var(--green)); }
-  .bar.bad  .fill { background: linear-gradient(90deg, #991b1b, var(--red)); }
 
-  .progress-strip {
-    margin-top: 12px;
-    height: 6px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(212,175,55,0.18);
+  .wgra-roadmap-char.is-selected {
+    border: 2px solid var(--wgra-good);
+    box-shadow: 0 0 16px rgba(49,226,127,0.35);
+  }
+
+  /* DASHBOARD */
+  .wgra-roadmap-dash {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .wgra-roadmap-tile {
+    border-radius: 14px;
+    border: 1px solid rgba(245,228,179,0.35);
+    background: rgba(0,0,0,0.65);
+    padding: 10px 12px;
+  }
+
+  .wgra-roadmap-tile-label {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--wgra-text-soft);
+  }
+
+  .wgra-roadmap-tile-value {
+    font-size: 20px;
+    font-weight: 800;
+    margin-top: 2px;
+  }
+
+  .wgra-roadmap-tile-value.is-neg { color: var(--wgra-bad); }
+  .wgra-roadmap-tile-value.is-pos { color: var(--wgra-good); }
+
+  .wgra-roadmap-recap {
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    border-left: 3px solid var(--wgra-gold);
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    color: var(--wgra-text-soft);
+  }
+
+  .wgra-roadmap-recap strong { color: var(--wgra-text-main); }
+
+  /* DECISION */
+  .wgra-roadmap-tag {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 10px;
     border-radius: 999px;
-    overflow: hidden;
-  }
-  .progress-strip .pf {
-    height: 100%; width: 0%;
-    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
-    transition: width .3s ease;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, #3b2b0a, #8c6d23);
+    color: #fff4c4;
   }
 
-  .nav-row { display: flex; gap: 10px; margin-top: 14px; }
-  .nav-row .btn { flex: 1; }
-
-  .results .rating-badge {
-    display: inline-block; margin: 4px 0 12px;
-    padding: 6px 14px; border-radius: 999px;
-    background: linear-gradient(180deg, #d4af37, #a8862a);
-    color: #000; font-weight: 800; letter-spacing: 0.8px;
-    border: 1px solid var(--gold-soft);
-  }
-  .results .summary {
-    color: var(--text); font-size: 14px; line-height: 1.6;
-    background: #090909; border: 1px solid var(--border);
-    padding: 12px 14px; border-radius: 12px; margin-top: 8px;
-  }
-  .results .lessons { margin-top: 12px; }
-  .results .lessons h3 {
-    color: var(--gold); font-size: 13px; text-transform: uppercase;
-    letter-spacing: 1.2px; margin: 0 0 6px;
-  }
-  .results .lessons ul { margin: 0; padding-left: 20px; }
-  .results .lessons li { color: var(--gold-soft); margin: 6px 0; line-height: 1.5; }
-
-  .disclaimer {
-    color: var(--muted); font-size: 11px; line-height: 1.55;
-    margin: 16px 4px 0;
+  .wgra-roadmap-tag.is-event {
+    background: linear-gradient(90deg, #4a1010, #8c2323);
   }
 
-  .how-list { padding-left: 18px; margin: 6px 0 0; }
-  .how-list li { color: var(--text); margin: 7px 0; line-height: 1.55; font-size: 14px; }
-
-  @media (min-width: 700px) {
-    .metrics-grid { grid-template-columns: 1fr 1fr 1fr; }
-    .hero h1 { font-size: 28px; }
-    .hero .tag { font-size: 15px; }
-    .stage h2 { font-size: 22px; }
+  .wgra-roadmap-question {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 14px;
   }
+
+  .wgra-roadmap-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .wgra-roadmap-option {
+    position: relative;
+    border-radius: 14px;
+    padding: 12px 14px 12px 46px;
+    background: rgba(5,5,5,0.96) !important;
+    border: 1px solid rgba(245,228,179,0.55);
+    color: var(--wgra-text-main) !important;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  }
+
+  .wgra-roadmap-option span { color: inherit !important; }
+
+  .wgra-roadmap-option:hover:not(:disabled),
+  .wgra-roadmap-option:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.8);
+    border-color: var(--wgra-gold);
+  }
+
+  .wgra-roadmap-option:disabled { cursor: default; }
+
+  .wgra-roadmap-option-label {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    border: 2px solid rgba(245,228,179,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--wgra-text-soft) !important;
+  }
+
+  .wgra-roadmap-option.is-chosen {
+    border: 2px solid var(--wgra-gold-soft);
+    box-shadow: 0 0 14px rgba(245,210,106,0.45);
+  }
+
+  .wgra-roadmap-option.is-best {
+    border-color: var(--wgra-good);
+  }
+
+  .wgra-roadmap-feedback {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    line-height: 1.6;
+    background: rgba(5,5,5,0.92);
+    border: 1px solid rgba(245,228,179,0.7);
+    color: var(--wgra-text-soft);
+  }
+
+  .wgra-roadmap-feedback.is-strong { border-color: var(--wgra-good); }
+  .wgra-roadmap-feedback.is-mixed { border-color: var(--wgra-mid); }
+  .wgra-roadmap-feedback.is-risky { border-color: var(--wgra-bad); }
+
+  .wgra-roadmap-feedback strong { color: var(--wgra-text-main); }
+
+  .wgra-roadmap-feedback ul {
+    margin: 6px 0 0 18px;
+    padding: 0;
+    font-size: 15px;
+  }
+
+  /* BUTTONS */
+  .wgra-roadmap-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .wgra-roadmap-btn {
+    padding: 12px 26px;
+    border-radius: 999px;
+    border: 1px solid rgba(212,175,55,0.9);
+    background: radial-gradient(circle at top, #fff3b8, #fbe79a 35%, #d4af37 85%) !important;
+    color: #1b1303 !important;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  }
+
+  .wgra-roadmap-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .wgra-roadmap-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
+
+  .wgra-roadmap-btn-secondary {
+    background: #050505 !important;
+    color: var(--wgra-gold-soft) !important;
+    border-color: rgba(245,228,179,0.9) !important;
+  }
+
+  /* RESULTS */
+  .wgra-roadmap-score-main {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--wgra-gold-soft);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .wgra-roadmap-score-tagline {
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center;
+    color: var(--wgra-text-soft);
+    margin-bottom: 14px;
+  }
+
+  .wgra-roadmap-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    margin: 6px 0 12px;
+  }
+
+  .wgra-roadmap-table td {
+    color: var(--wgra-text-main);
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(245,228,179,0.2);
+  }
+
+  .wgra-roadmap-table td:last-child {
+    text-align: right;
+    font-weight: 700;
+  }
+
+  .wgra-roadmap-table tr.is-total td {
+    color: var(--wgra-gold-soft);
+    font-size: 17px;
+    border-bottom: none;
+  }
+
+  .wgra-roadmap-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 0;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .wgra-roadmap-highlight {
+    border-radius: 14px;
+    border: 1px solid rgba(49,226,127,0.5);
+    background: rgba(49,226,127,0.07);
+    padding: 12px 16px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .wgra-roadmap-review {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--wgra-text-soft);
+  }
+
+  .wgra-roadmap-review li { margin-bottom: 10px; }
+  .wgra-roadmap-review strong { color: var(--wgra-text-main); }
+
+  .wgra-v-strong { color: var(--wgra-good); font-weight: 700; }
+  .wgra-v-mixed { color: var(--wgra-mid); font-weight: 700; }
+  .wgra-v-risky { color: var(--wgra-bad); font-weight: 700; }
+
+  .wgra-roadmap-note {
+    font-size: 13px;
+    color: #cfcfcf;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 800px) {
+    .wgra-roadmap-chars { grid-template-columns: 1fr; }
+    .wgra-roadmap-dash { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 640px) {
+    .wgra-roadmap-wrapper {
+      padding: 28px 14px 40px;
+      border-radius: 16px;
+    }
+    .wgra-roadmap-title { font-size: 26px; }
+    .wgra-roadmap-question { font-size: 17px; }
+    .wgra-roadmap-option { font-size: 15px; }
+    .wgra-roadmap-tile-value { font-size: 18px; }
+    .wgra-roadmap-btn { width: 100%; }
+  }
+
+  /* ================= ANDROID APP SHELL ================= */
+  :root { --bar-h: 56px; --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body {
+    margin: 0; padding: 0; min-height: 100%;
+    background: #000;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+  /* Pure black so the logo's black background blends in (no visible box). */
+  #wgra-roadmap-root { background: #000; padding: calc(var(--bar-h) + var(--safe-top) + 14px) 12px calc(28px + var(--safe-bottom)); min-height: 100vh; }
+  #wgra-roadmap-root { max-width: 900px; margin: 0 auto; border-radius: 0; box-shadow: none; } #wgra-roadmap-root .wgra-roadmap-card { scroll-margin-top: calc(var(--bar-h) + var(--safe-top) + 10px); }
+  
+  
+
+  .app-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+    padding-top: var(--safe-top);
+    background: #000;
+    border-bottom: 1px solid rgba(212,175,55,0.25);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .app-bar-row { height: var(--bar-h); max-width: 820px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 0 6px 0 12px; }
+  .app-bar-logo { width: 36px; height: 36px; border-radius: 8px; }
+  .app-bar-title { flex: 1; min-width: 0; font-size: 19px; font-weight: 800; color: #fbe79a; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .icon-btn { width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+  .icon-btn:active { background: rgba(255,255,255,0.1); }
+  .icon-btn svg { width: 24px; height: 24px; fill: #fdfaf0; }
+
+  /* Setup hero: big logo, shown only on the setup screen */
+  .app-hero { display: none; text-align: center; margin: 4px 0 18px; }
+  #wgra-roadmap-root.is-start .app-hero { display: block; }
+  .app-hero img { width: min(64vw, 260px, 34vh); height: min(64vw, 260px, 34vh); }
+  /* Landscape phones: keep the logo small so the game starts on screen */
+  @media (orientation: landscape) and (max-height: 560px) {
+    .app-hero { margin-bottom: 10px; }
+    .app-hero p { margin-top: 6px; font-size: 15px; }
+  }
+  .app-hero p { margin: 10px auto 0; max-width: 560px; font-size: 16px; line-height: 1.5; color: #f5e4b3; }
+
+  /* Bottom sheets: menu, tips, help, about, privacy, credits */
+  .scrim { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: opacity .25s; }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    max-width: 820px; margin: 0 auto; max-height: 85vh; overflow-y: auto;
+    background: #1a1a1a; border-radius: 24px 24px 0 0; border-top: 1px solid rgba(212,175,55,0.4);
+    padding: 10px 20px calc(24px + var(--safe-bottom));
+    transform: translateY(105%); transition: transform .3s cubic-bezier(.2,.8,.2,1);
+    color: #fdfaf0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .sheet.open { transform: none; }
+  .sheet-handle { width: 36px; height: 4px; border-radius: 2px; background: #555; margin: 0 auto 14px; }
+  .sheet h3 { margin: 0 0 10px; font-size: 21px; color: #fbe79a; }
+  .sheet p, .sheet li { font-size: 15px; line-height: 1.6; color: #e8e4d6; }
+  .sheet ul { padding-left: 20px; margin: 0 0 10px; }
+  .sheet .muted { color: rgba(253,250,240,0.6); font-size: 14px; }
+  .sheet-close {
+    display: block; width: 100%; margin-top: 14px; min-height: 50px; border: 0; border-radius: 14px;
+    background: #2a2a2a; color: #fbe79a; font: inherit; font-size: 16px; font-weight: 800; cursor: pointer;
+  }
+  .menu-item { display: flex; align-items: center; gap: 16px; width: 100%; padding: 14px 6px; border: 0; background: transparent; color: #fdfaf0; font: inherit; font-size: 16px; text-align: left; cursor: pointer; border-radius: 12px; }
+  .menu-item:active { background: rgba(255,255,255,0.06); }
+  .menu-item svg { width: 22px; height: 22px; fill: #d4af37; flex: none; }
+
+  /* Intro splash: the big logo while the app opens */
+  .app-splash { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; align-items: center; justify-content: center; transition: opacity .45s ease; }
+  .app-splash img { width: min(80vw, 80vh, 520px); height: min(80vw, 80vh, 520px); animation: app-splash-in .6s ease both; }
+  .app-splash.out { opacity: 0; pointer-events: none; }
+  @keyframes app-splash-in { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .app-splash, .app-splash img, .sheet, .scrim { animation: none; transition: none; } }
+  @media (max-width: 380px) { .app-bar-title { font-size: 16.5px; letter-spacing: 0; } .app-bar-row { gap: 8px; } }
 </style>
 </head>
 <body>
-<div class="app">
+<div id="app-splash" class="app-splash" aria-hidden="true"><img src="logo.jpg" alt=""></div>
 
-  <div class="topbar">
-    <div class="logo"><img src="img/logo.png" alt="" /></div>
-    <div class="title-block">
-      <div class="title">GENERATIONAL WEALTH ROADMAP&trade;</div>
-      <div class="subtitle">WGRALGO offline financial decision game</div>
-    </div>
+<header class="app-bar">
+  <div class="app-bar-row">
+    <img class="app-bar-logo" src="logo.jpg" alt="">
+    <div class="app-bar-title">Generational Wealth</div>
+    <button type="button" class="icon-btn" data-sheet="sheet-menu" aria-label="More options"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></button>
+  </div>
+</header>
+
+<div class="wgra-roadmap-wrapper is-start" id="wgra-roadmap-root">
+  <div class="app-hero">
+    <img src="logo.jpg" alt="Generational Wealth Roadmap logo">
+    <p>Live a whole financial life — from 18 to your legacy years. Make real-world money decisions,
+      handle life's surprises, and watch how your choices grow (or drain) your family's wealth over decades.</p>
   </div>
 
-  <!-- HOME -->
-  <section id="screen-home" class="screen active">
-    <div class="hero">
-      <div class="emblem"><img src="img/logo.png" alt="" /></div>
-      <h1>Generational Wealth Roadmap&trade;</h1>
-      <div class="tag">
-        Walk through life stages, make real-world money decisions,
-        and see how your choices shape a long-term family wealth story.
-      </div>
-      <button class="btn gold" id="btn-start">Choose a Path</button>
-      <button class="btn ghost" id="btn-how">How It Works</button>
-    </div>
-    <div class="disclaimer">
-      Educational awareness only. Not legal, financial, tax, investment,
-      estate planning, credit, lending, or professional advice. For
-      personal financial decisions, consult a qualified professional.
-    </div>
-  </section>
+  <div class="wgra-roadmap-progress" id="wgra-roadmap-progress"></div>
+  <div id="wgra-roadmap-main" aria-live="polite"></div>
+</div>
 
-  <!-- HOW IT WORKS -->
-  <section id="screen-how" class="screen">
-    <div class="card">
-      <div class="section-title" style="margin-top:0">How It Works</div>
-      <ol class="how-list">
-        <li>You walk through 12 life stages, from money mindset to legacy planning.</li>
-        <li>Each stage gives a short scenario and 3 realistic choices.</li>
-        <li>Every choice updates 7 metrics: Wealth Score, Emergency Fund, Credit Health, Debt Risk, Investment Growth, Family Stability, Legacy Impact.</li>
-        <li>You see immediate feedback and a short money lesson.</li>
-        <li>At the end you get a Family Wealth Story, rating, strongest and weakest category, and 3 personalized lessons.</li>
-      </ol>
-      <div style="margin-top:14px">
-        <button class="btn gold" id="btn-how-start">Start the Roadmap</button>
-        <button class="btn ghost" id="btn-how-back">Back</button>
-      </div>
-    </div>
-  </section>
+<div id="scrim" class="scrim"></div>
 
-  <!-- STAGE -->
-  <section id="screen-stage" class="screen">
-    <div class="card stage" id="stage-card">
-      <div class="stage-head">
-        <div class="stage-num" id="stage-num">Stage 1 of 12</div>
-        <div class="stage-progress" id="stage-progress">Wealth Score 50</div>
-      </div>
-      <h2 id="stage-title">Stage title</h2>
-      <div class="scenario" id="stage-scenario">Scenario text...</div>
-      <div class="choices" id="stage-choices"></div>
+<div id="sheet-menu" class="sheet" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="sheet-handle"></div>
+  <button type="button" class="menu-item" data-sheet="sheet-about"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>About</button>
+  <button type="button" class="menu-item" data-sheet="sheet-privacy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>Privacy</button>
+  <button type="button" class="menu-item" data-sheet="sheet-credits"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Credits</button>
+</div>
 
-      <div id="stage-feedback" class="feedback" style="display:none"></div>
+<div id="sheet-about" class="sheet" role="dialog" aria-modal="true" aria-label="About">
+  <div class="sheet-handle"></div>
+  <h3>About</h3>
+  <p>Generational Wealth Roadmap is a free money game from WGRALGO / The Wealth Gap Resolution Algorithm™ Inc. Live a whole financial life, from 18 to your legacy years, and see how your choices grow (or drain) your family's wealth.</p>
+  <h3>How it works</h3>
+  <ul>
+    <li>Pick who you are at 18.</li>
+    <li>Make 10 decisions across 5 life stages, including surprise life events. Investments grow, debts cost interest, and time passes between stages.</li>
+    <li>At the end, see your Family Wealth Score, your finances at 65, and how much is likely to reach the next generation.</li>
+  </ul>
+  <p class="muted">A simplified game model for learning, not a financial prediction or financial advice.</p>
+  <p class="muted">Generational Wealth Roadmap v2.0.0</p>
+  <button type="button" class="sheet-close" data-close>Close</button>
+</div>
 
-      <div class="progress-strip"><div class="pf" id="progress-fill"></div></div>
+<div id="sheet-privacy" class="sheet" role="dialog" aria-modal="true" aria-label="Privacy">
+  <div class="sheet-handle"></div>
+  <h3>Privacy</h3>
+  <p>This app works offline and doesn’t save anything on your device. It does not collect personal data.</p>
+  <ul>
+    <li>No ads</li>
+    <li>No account</li>
+    <li>No analytics, cookies, or trackers</li>
+    <li>No internet permission</li>
+  </ul>
+  <button type="button" class="sheet-close" data-close>Close</button>
+</div>
 
-      <div class="nav-row">
-        <button class="btn ghost" id="btn-restart">Restart</button>
-        <button class="btn gold" id="btn-next" disabled>Next Stage</button>
-      </div>
-    </div>
-
-    <div class="card metrics-card">
-      <h3>Your Long-Term Story</h3>
-      <div class="metrics-grid" id="metrics-grid"></div>
-    </div>
-  </section>
-
-  <!-- RESULTS -->
-  <section id="screen-results" class="screen">
-    <div class="card results">
-      <div class="section-title" style="margin-top:0">Final Family Wealth Story</div>
-      <div class="rating-badge" id="rating-badge">Wealth Strategist</div>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:6px">
-        Final Wealth Score: <span id="final-score" style="color:var(--gold);font-weight:800">0</span> / 100
-      </div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">
-        Strongest area: <b id="best-cat" style="color:var(--gold-soft)">-</b>
-        &nbsp;&middot;&nbsp;
-        Weakest area: <b id="worst-cat" style="color:var(--gold-soft)">-</b>
-      </div>
-      <div class="summary" id="result-summary"></div>
-      <div class="lessons">
-        <h3>3 Lessons For You</h3>
-        <ul id="result-lessons"></ul>
-      </div>
-
-      <div class="metrics-card" style="margin-top:14px;">
-        <h3 style="color:var(--gold);font-size:13px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 10px;">Final Metrics</h3>
-        <div class="metrics-grid" id="metrics-grid-final"></div>
-      </div>
-
-      <div class="nav-row">
-        <button class="btn ghost" id="btn-results-home">Home</button>
-        <button class="btn gold" id="btn-play-again">Play Again</button>
-      </div>
-    </div>
-    <div class="disclaimer">
-      Educational awareness only. Not legal, financial, tax, investment,
-      estate planning, credit, lending, or professional advice. For
-      personal financial decisions, consult a qualified professional.
-    </div>
-  </section>
-
+<div id="sheet-credits" class="sheet" role="dialog" aria-modal="true" aria-label="Credits">
+  <div class="sheet-handle"></div>
+  <h3>Credits</h3>
+  <ul>
+    <li><strong>WGRALGO</strong> — Project owner, concept, direction, testing, and publishing.</li>
+    <li><strong>ChatGPT</strong> — Original web game assistance.</li>
+    <li><strong>Claude Code</strong> — Android app build, packaging, and GitHub project setup.</li>
+  </ul>
+  <p class="muted">Free and open source under the GNU General Public License v3.0 or later. Made by WGRALGO / The Wealth Gap Resolution Algorithm™ Inc.</p>
+  <button type="button" class="sheet-close" data-close>Close</button>
 </div>
 
 <script>
-const METRICS = [
-  { key: 'wealth',    label: 'Wealth Score',      lowerBetter: false },
-  { key: 'emergency', label: 'Emergency Fund',    lowerBetter: false },
-  { key: 'credit',    label: 'Credit Health',     lowerBetter: false },
-  { key: 'debt',      label: 'Debt Risk',         lowerBetter: true  },
-  { key: 'invest',    label: 'Investment Growth', lowerBetter: false },
-  { key: 'family',    label: 'Family Stability',  lowerBetter: false },
-  { key: 'legacy',    label: 'Legacy Impact',     lowerBetter: false },
-];
+  (function() {
+    /* ---------------------------------------------------------------
+       HOW THE MONEY WORKS (a simplified game model, not a prediction)
+       - Investments grow about 7% a year on average.
+       - Credit card debt costs about 22% a year, student/car loans about 6%.
+         Minimum payments are assumed to cover the interest, so balances
+         stay put unless you pay extra. Savings above a $1,000 cushion
+         are used to pay down card debt.
+       - Loans are paid off over about 10 years.
+       - Surprise costs come from savings first. If savings run out,
+         the rest goes on a credit card.
 
-const STAGES = [
-  {
-    title: 'Starting Point: Money Mindset',
-    scenario: 'You are setting your first money goals. How will you think about wealth?',
-    choices: [
-      { text: 'Wealth is a long game. I will build steady habits and learn as I go.',
-        good: true,
-        feedback: 'Strong start. A long-term mindset survives bad months and bad markets.',
-        lesson: 'Patience plus consistency beats short bursts of effort.',
-        deltas: { wealth:+5, family:+3, legacy:+3 } },
-      { text: 'Wealth is luck. I will spend what I have and hope for a big break.',
-        good: false,
-        feedback: 'A break may never come. Hope alone is not a plan.',
-        lesson: 'Plans beat luck. Habits beat moods.',
-        deltas: { wealth:-5, emergency:-3, debt:+5 } },
-      { text: 'I will copy what looks rich on social media, even if I cannot afford it.',
-        good: false,
-        feedback: 'Image-driven spending burns money fast and teaches the wrong lessons.',
-        lesson: 'Looking wealthy and being wealthy are very different things.',
-        deltas: { wealth:-6, debt:+8, family:-2 } },
-    ],
-  },
-  {
-    title: 'Education and Skill Building',
-    scenario: 'You can spend free time on a new skill or stick with what you have.',
-    choices: [
-      { text: 'Take a free online course in a skill that pays better.',
-        good: true,
-        feedback: 'Skill growth raises future income without big upfront cost.',
-        lesson: 'Cheap learning today can raise your ceiling for decades.',
-        deltas: { wealth:+5, invest:+3, family:+2, legacy:+2 } },
-      { text: 'Take an expensive course on credit with no clear payoff plan.',
-        good: false,
-        feedback: 'Borrowed money for vague skills is a slow leak.',
-        lesson: 'Match the cost of learning to the income it will realistically add.',
-        deltas: { debt:+7, wealth:-3 } },
-      { text: 'Skip learning. The job I have is good enough forever.',
-        good: false,
-        feedback: 'Industries shift. Skills age. Standing still is going backward.',
-        lesson: 'Your earning power needs maintenance like a car needs oil.',
-        deltas: { wealth:-3, invest:-3, legacy:-2 } },
-    ],
-  },
-  {
-    title: 'First Job: Income Choices',
-    scenario: 'You finally get a steady paycheck. What do you do first?',
-    choices: [
-      { text: 'Open a checking and a savings account, automate a small transfer.',
-        good: true,
-        feedback: 'Automation removes willpower from the equation.',
-        lesson: 'Pay yourself first. The number is less important than the habit.',
-        deltas: { wealth:+4, emergency:+8, family:+2 } },
-      { text: 'Spend most of it on a lifestyle upgrade to celebrate.',
-        good: false,
-        feedback: 'A small celebration is fine. A full lifestyle reset on day one is risky.',
-        lesson: 'Lifestyle creep eats raises before they ever reach your savings.',
-        deltas: { emergency:-6, debt:+4, wealth:-2 } },
-      { text: 'Cash the check and keep it under the mattress.',
-        good: false,
-        feedback: 'Cash at home loses to inflation and can be lost or stolen.',
-        lesson: 'A boring bank account beats a creative hiding place.',
-        deltas: { emergency:-3, wealth:-2 } },
-    ],
-  },
-  {
-    title: 'Budgeting and Emergency Fund',
-    scenario: 'A friend invites you to a weekend trip. You have no emergency fund.',
-    choices: [
-      { text: 'Skip the trip. Start building a starter emergency fund instead.',
-        good: true,
-        feedback: 'Boring choice today, calm choice when the car breaks down later.',
-        lesson: 'An emergency fund is insurance against panic decisions.',
-        deltas: { emergency:+10, family:+3, debt:-2 } },
-      { text: 'Go on the trip and put it on a credit card you cannot pay off this month.',
-        good: false,
-        feedback: 'Memories on revolving debt are very expensive memories.',
-        lesson: 'High-interest debt turns one weekend into months of cleanup.',
-        deltas: { debt:+10, credit:-5, wealth:-4 } },
-      { text: 'Go but only spend cash you already saved for fun money.',
-        good: true,
-        feedback: 'Fun and budget can coexist when you plan ahead.',
-        lesson: 'A budget is not a no. It is a where and when.',
-        deltas: { family:+3, wealth:+1, emergency:-2 } },
-    ],
-  },
-  {
-    title: 'Credit and Debt Decisions',
-    scenario: 'You qualify for a higher credit limit. What is your move?',
-    choices: [
-      { text: 'Accept the higher limit but keep my spending the same.',
-        good: true,
-        feedback: 'More limit, same spending lowers your utilization ratio.',
-        lesson: 'Credit health rewards restraint, not access.',
-        deltas: { credit:+8, debt:-2, wealth:+2 } },
-      { text: 'Accept and treat it as free money to celebrate.',
-        good: false,
-        feedback: 'A credit limit is not income. It is a loan offer.',
-        lesson: 'Borrowing for celebrations is the most expensive way to celebrate.',
-        deltas: { debt:+10, credit:-6, emergency:-4 } },
-      { text: 'Refuse the offer and avoid using credit cards at all.',
-        good: false,
-        feedback: 'Avoidance is safer than overuse but slows credit history.',
-        lesson: 'Light, on-time use of credit builds a stronger file than total avoidance.',
-        deltas: { credit:-3, wealth:-1 } },
-    ],
-  },
-  {
-    title: 'Housing Choices',
-    scenario: 'You are tired of renting. Friends say you should buy now.',
-    choices: [
-      { text: 'Rent a modest place and build a down payment and emergency fund first.',
-        good: true,
-        feedback: 'A boring rental with money in the bank beats a stressful mortgage.',
-        lesson: 'A home only builds wealth if it does not break your budget.',
-        deltas: { emergency:+8, wealth:+3, family:+3 } },
-      { text: 'Buy at the top of my budget with a low down payment.',
-        good: false,
-        feedback: 'A thin down payment plus high payments plus repairs equals stress.',
-        lesson: 'A mortgage you can barely afford is a luxury you cannot really afford.',
-        deltas: { debt:+10, emergency:-8, family:-3 } },
-      { text: 'Move in with family for a year to save aggressively.',
-        good: true,
-        feedback: 'Short-term discomfort can fund a long-term advantage.',
-        lesson: 'Lower housing costs are the fastest legal way to save more.',
-        deltas: { emergency:+12, wealth:+4, family:+2 } },
-    ],
-  },
-  {
-    title: 'Investing and Retirement',
-    scenario: 'Your job offers a retirement plan with an employer match.',
-    choices: [
-      { text: 'Contribute at least enough to get the full match.',
-        good: true,
-        feedback: 'The employer match is one of the few real free returns in finance.',
-        lesson: 'Free match money compounds for decades. Take it.',
-        deltas: { invest:+12, wealth:+6, legacy:+4 } },
-      { text: 'Skip it because retirement is far away.',
-        good: false,
-        feedback: 'Time is the cheat code of investing. Skipping it leaves money on the table.',
-        lesson: 'Decades of compounding lost cannot be replaced later.',
-        deltas: { invest:-8, legacy:-5, wealth:-3 } },
-      { text: 'Put it all in one risky stock a coworker recommended.',
-        good: false,
-        feedback: 'Concentrated bets can win, but they can also wipe out your retirement.',
-        lesson: 'Diversification is how regular people stay in the game.',
-        deltas: { invest:-6, debt:+3, wealth:-3 } },
-    ],
-  },
-  {
-    title: 'Family Support and Household Stability',
-    scenario: 'A close family member asks for a large loan you cannot really afford.',
-    choices: [
-      { text: 'Offer a smaller gift you can afford and discuss a longer plan.',
-        good: true,
-        feedback: 'Real support fits inside your own stability.',
-        lesson: 'You cannot rescue anyone from inside a sinking boat.',
-        deltas: { family:+6, wealth:+1, emergency:-2 } },
-      { text: 'Drain my emergency fund to give them the full amount.',
-        good: false,
-        feedback: 'Empty emergency funds usually lead to new debt within months.',
-        lesson: 'Generosity without limits often turns into shared crisis.',
-        deltas: { emergency:-12, family:+3, debt:+5 } },
-      { text: 'Refuse with no conversation and cut contact.',
-        good: false,
-        feedback: 'Silence damages the relationship more than the no would.',
-        lesson: 'Honest no plus honest reason protects both the money and the bond.',
-        deltas: { family:-7, legacy:-3 } },
-    ],
-  },
-  {
-    title: 'Entrepreneurship or Career Growth',
-    scenario: 'You have an idea for a small side business. How do you start?',
-    choices: [
-      { text: 'Start small on nights and weekends while keeping the main job.',
-        good: true,
-        feedback: 'Validated demand before quitting is much safer than betting blind.',
-        lesson: 'Side income is allowed to be small while it learns to walk.',
-        deltas: { wealth:+5, invest:+3, family:+2 } },
-      { text: 'Quit my job and put my last savings into the idea.',
-        good: false,
-        feedback: 'No runway and no proof equals very high failure risk.',
-        lesson: 'Bet the smallest amount that can still teach you what you need to know.',
-        deltas: { emergency:-10, debt:+8, family:-3 } },
-      { text: 'Take a high-interest loan to launch big with ads on day one.',
-        good: false,
-        feedback: 'Loud launches with no product fit can lose money even faster.',
-        lesson: 'Marketing cannot fix a product that nobody actually wants.',
-        deltas: { debt:+12, wealth:-4, credit:-4 } },
-    ],
-  },
-  {
-    title: 'Crisis: Unexpected Expense',
-    scenario: 'Your car needs a repair that is more than your spending budget allows.',
-    choices: [
-      { text: 'Pay from my emergency fund and rebuild it over the next few months.',
-        good: true,
-        feedback: 'That is exactly what an emergency fund is for.',
-        lesson: 'A used emergency fund did its job. A debt-fueled fix creates a new problem.',
-        deltas: { emergency:-8, debt:-2, family:+3, wealth:+1 } },
-      { text: 'Put the full repair on a high-interest credit card.',
-        good: false,
-        feedback: 'A short repair becomes a long interest payment.',
-        lesson: 'Plastic for emergencies is convenient and expensive.',
-        deltas: { debt:+10, credit:-5, wealth:-3 } },
-      { text: 'Skip the repair and risk a bigger breakdown later.',
-        good: false,
-        feedback: 'Postponed maintenance is one of the most common ways small bills become huge ones.',
-        lesson: 'Cheap fix now beats expensive replacement later.',
-        deltas: { family:-4, wealth:-4, debt:+5 } },
-    ],
-  },
-  {
-    title: 'Lifestyle and Raises',
-    scenario: 'You get a raise at work. What do you do with the extra income?',
-    choices: [
-      { text: 'Send most of the raise straight to savings and investing.',
-        good: true,
-        feedback: 'Banking raises is one of the simplest wealth-building moves.',
-        lesson: 'You already lived without it. Let your future self enjoy it.',
-        deltas: { wealth:+6, invest:+6, emergency:+4, legacy:+3 } },
-      { text: 'Upgrade my car, my apartment, and my subscriptions immediately.',
-        good: false,
-        feedback: 'A bigger lifestyle on a small cushion is fragile.',
-        lesson: 'Lifestyle inflation quietly cancels every raise you will ever earn.',
-        deltas: { debt:+8, emergency:-6, wealth:-3 } },
-      { text: 'Split the raise: half to savings, a little for fun, a little for family.',
-        good: true,
-        feedback: 'Balanced choices keep both your numbers and your mood healthy.',
-        lesson: 'A plan that includes joy is a plan you will actually follow.',
-        deltas: { wealth:+3, family:+3, emergency:+2 } },
-    ],
-  },
-  {
-    title: 'Legacy Planning',
-    scenario: 'You think about what to pass on to the next generation.',
-    choices: [
-      { text: 'Teach money basics, set up a will, and keep paperwork organized.',
-        good: true,
-        feedback: 'Knowledge and clear paperwork protect a family more than a big surprise check.',
-        lesson: 'Legacy is mostly clarity, calm, and skills, not a single big number.',
-        deltas: { legacy:+12, family:+6, wealth:+2 } },
-      { text: 'Plan to spend every dollar on myself and skip planning.',
-        good: false,
-        feedback: 'No plan plus no documents equals chaos for everyone you leave behind.',
-        lesson: 'A weekend of planning prevents years of conflict.',
-        deltas: { legacy:-10, family:-5 } },
-      { text: 'Promise a huge inheritance with no plan to actually fund it.',
-        good: false,
-        feedback: 'Promises without funding turn into broken trust.',
-        lesson: 'Smaller, real legacy beats giant, imaginary legacy every time.',
-        deltas: { legacy:-6, family:-3, wealth:-2 } },
-    ],
-  },
-];
+       Option effects (fx):
+         cash       one-time change to savings
+         cost       one-time bill (savings first, then credit card)
+         inv        one-time change to investments
+         card       one-time credit card debt
+         loans      one-time loan (paid off over ~10 years)
+         save       yearly amount invested (+/-)
+         cashYear   yearly amount added to savings (+/-)
+         debtPay    extra yearly debt payments (+/-)
+         homeEq     one-time home equity
+         homeGain   yearly home equity growth (+/-)
+         invCash    [amount, keep] cash out investments early (keep = share kept after taxes/penalties)
+         invLoss    share of investments lost
+         invToCash  share of investments moved to cash (stops growing)
+         cashLoss   share of savings lost
+         payDebt    windfall that pays debt first, the rest gets invested
+         homeToCard move credit card debt into home equity (HELOC)
+         flags      protection steps completed
+    ---------------------------------------------------------------- */
 
-const startMetrics = { wealth:50, emergency:30, credit:50, debt:40, invest:30, family:60, legacy:30 };
-let metrics, stageIdx, picks;
+    const CHARACTERS = [
+      { id: "student", name: "First-Gen Student",
+        desc: "18, first in the family to go to college. Big dreams, little money.",
+        start: { cash: 300, card: 0, cashYear: 300 } },
+      { id: "trades", name: "Trades Apprentice",
+        desc: "18, good with your hands, ready to learn a skilled trade and start earning.",
+        start: { cash: 500, card: 0, cashYear: 500 } },
+      { id: "parent", name: "Young Parent",
+        desc: "19, with a new baby. Working hard, stretched thin, determined to build something.",
+        start: { cash: 200, card: 1500, cashYear: 100 } }
+    ];
 
-function resetGame() { metrics = Object.assign({}, startMetrics); stageIdx = 0; picks = []; }
-function clamp(n) { return Math.max(0, Math.min(100, n)); }
-function applyDeltas(d) { for (const k in d) if (k in metrics) metrics[k] = clamp(metrics[k] + d[k]); }
-function metricGoodness(key, val) {
-  const def = METRICS.find(m => m.key === key);
-  return def && def.lowerBetter ? 100 - val : val;
-}
+    const STAGES = [
+      { name: "Launchpad Years", ages: "18–25", from: 18, to: 25 },
+      { name: "Foundation Building", ages: "25–35", from: 25, to: 35 },
+      { name: "Growth & Responsibilities", ages: "35–50", from: 35, to: 50 },
+      { name: "Freedom Planning", ages: "50–65", from: 50, to: 65 },
+      { name: "Legacy & Next Generation", ages: "65+", from: 65, to: 65 }
+    ];
 
-function show(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
-  window.scrollTo(0, 0);
-}
+    /* ---------------- DECISIONS ----------------
+       stage: 1–5    who: character id (optional)    event: true for surprises
+       o: [text, points (0–10), fx, why]
+    ------------------------------------------------ */
+    const DECISIONS = [
 
-function renderMetrics(targetId) {
-  const grid = document.getElementById(targetId);
-  grid.innerHTML = '';
-  for (const m of METRICS) {
-    const val = metrics[m.key];
-    const good = metricGoodness(m.key, val);
-    const cls = good >= 60 ? 'good' : good <= 35 ? 'bad' : '';
-    const valLabel = m.lowerBetter ? `${val} (lower = better)` : `${val}`;
-    grid.insertAdjacentHTML('beforeend',
-      `<div class="metric">
-        <div class="row"><span class="label">${m.label}</span><span class="val">${valLabel}</span></div>
-        <div class="bar ${cls}"><div class="fill" style="width:${good}%"></div></div>
-      </div>`);
+      /* ===== STAGE 1: character starts ===== */
+      { stage: 1, who: "student", title: "Your college plan",
+        q: "You got into college. How do you pay for it?",
+        o: [
+          ["Fill out the FAFSA, start at community college, then transfer to a 4-year school. Work part-time.", 10, { loans: 8000, cashYear: 400 },
+           "The FAFSA unlocks grants (free money) and safer federal loans. Starting at community college can cut the cost of a degree dramatically."],
+          ["Go to your in-state public university, apply for every grant and scholarship, and borrow only for the gap.", 8, { loans: 20000, cashYear: 400 },
+           "A solid plan. Grants and scholarships first, then borrowing only what you need, keeps debt manageable."],
+          ["Go to the private college you love most and borrow whatever it takes.", 4, { loans: 60000, cashYear: 400 },
+           "Your degree pays off, but $60,000 in loans means years of payments that could have been investments."],
+          ["Skip the FAFSA (“my family won't qualify”) and put tuition on credit cards.", 1, { card: 8000, cashYear: 400 },
+           "Many families qualify for aid they don't expect. Credit cards at 22% are one of the most expensive ways to pay for school."]
+        ] },
+
+      { stage: 1, who: "trades", title: "Your trade path",
+        q: "You want to become an electrician. Which path do you take?",
+        o: [
+          ["Join a registered apprenticeship: earn while you learn, get certified, and get retirement benefits.", 10, { cashYear: 600, save: 500 },
+           "Registered apprenticeships pay you while you train, often with little or no tuition. Many union programs include retirement benefits."],
+          ["Take a helper job that pays $2 an hour more right away — you need the money now, and you can always get certified later.", 5, { cashYear: 300 },
+           "More money today, but without certification your pay may stay flat for years."],
+          ["Pay $15,000 to a for-profit trade school that “guarantees” job placement.", 3, { loans: 15000, cashYear: 300 },
+           "Some for-profit schools overpromise. Always check graduation and job placement rates — and compare with free apprenticeships."]
+        ] },
+
+      { stage: 1, who: "parent", title: "Work, school, and your baby",
+        q: "You need income, childcare, and a better future. What's your plan?",
+        o: [
+          ["Apply for childcare assistance and WIC, take a job with health insurance, and start a night certificate program.", 10, { cashYear: 500 },
+           "Using the benefits you qualify for isn't a handout — it's a bridge. Health insurance and new skills protect your family's future."],
+          ["Work two jobs with no benefits while family watches the baby for free — it's exhausting, but it brings in the most cash right now.", 5, { cashYear: 300, cost: 1500 },
+           "You're hustling, but with no health insurance, one doctor visit left you with a $1,500 bill."],
+          ["Put baby expenses on credit cards while you figure things out.", 2, { card: 4000 },
+           "Diapers and formula at 22% interest add up fast. Look into WIC and local diaper banks first."]
+        ] },
+
+      /* ===== STAGE 1: everyone ===== */
+      { stage: 1, title: "Your first paycheck",
+        q: "Your first real paycheck just hit your account. What's your plan?",
+        o: [
+          ["Set up an automatic $50-per-paycheck transfer to savings, and open a Roth IRA with $25 a month.", 10, { cashYear: 1300, save: 300 },
+           "Automating means you save before you can spend it. A Roth IRA grows tax-free for decades."],
+          ["Save whatever is left at the end of each month — you'll watch your spending closely so there's usually something left over.", 5, { cashYear: 300 },
+           "There's usually not much left. “Pay yourself first” works better than “save what's left.”"],
+          ["Spend it — you're young, you'll save later.", 1, {},
+           "Money invested at 18 has the most time to grow. Waiting is expensive."]
+        ] },
+
+      { stage: 1, title: "Your first credit card",
+        q: "You're offered your first credit card. How do you use it?",
+        o: [
+          ["Get a student or secured card, put one small bill on it, and pay it in full every month.", 10, { cashYear: 100 },
+           "This builds credit history for free. Good credit later means cheaper car loans, apartments, and mortgages."],
+          ["Open three store cards to get the sign-up discounts — more cards means more available credit, which should help your score.", 4, { card: 1200 },
+           "Store cards often have high interest and tempt you to spend more."],
+          ["Use it for a new phone and clothes, and pay the minimum.", 1, { card: 3000 },
+           "At 22%, a $3,000 balance paid at the minimum can take years and cost thousands in interest."]
+        ] },
+
+      { stage: 1, title: "Getting a car",
+        q: "You need a car to get to work.",
+        o: [
+          ["Buy a reliable used car for $5,000, paid mostly in cash.", 10, { cost: 4000 },
+           "A reliable used car avoids big payments and keeps money free for saving."],
+          ["Finance a brand-new car with a 72-month loan.", 3, { loans: 28000 },
+           "New cars lose value fast, and a 6-year loan means you may owe more than it's worth."],
+          ["Use a “buy here, pay here” lot with no credit check.", 2, { card: 9000 },
+           "These lots often charge very high interest. Credit unions usually offer much better loans."]
+        ] },
+
+      { stage: 1, title: "A “can't-miss” coin",
+        q: "A friend says a new crypto coin will “10× by summer” and you should put your savings in now.",
+        o: [
+          ["Learn the basics of low-cost index funds and start investing small, steady amounts.", 10, { save: 300 },
+           "Slow and steady wins. Index funds spread your money across hundreds of companies."],
+          ["Keep your savings in the bank for now.", 6, {},
+           "Safe from hype — but cash doesn't grow much. Learning to invest is the next step."],
+          ["Put all your savings into the coin — your friend already doubled their money, and you'll sell the moment it goes up.", 1, { cashLoss: 0.8 },
+           "The coin crashed and you lost 80% of your savings. Hype is not a plan."]
+        ] },
+
+      { stage: 1, title: "Where you live",
+        q: "You're ready to move out. What do you choose?",
+        o: [
+          ["Stay with family or split a place with roommates, pay your fair share, and save the difference.", 10, { cashYear: 1000 },
+           "Low housing costs in your early years can supercharge your savings."],
+          ["Get roommates, but eat out and order delivery most days.", 6, { cashYear: 300 },
+           "Good housing choice, but small daily spending eats up the savings."],
+          ["Get your own apartment that costs half your income — you'll finally have privacy, and you'll cut back in other areas to make it work.", 3, { cashYear: -300 },
+           "Rent at 50% of income leaves almost nothing for savings or surprises."]
+        ] },
+
+      /* ===== STAGE 2 (25–35) ===== */
+      { stage: 2, title: "The 401(k) match",
+        q: "Your job offers a 401(k) and will match your contributions up to 5% of your pay.",
+        o: [
+          ["Contribute at least enough to get the full match, invested in a low-cost target-date fund.", 10, { save: 3000 },
+           "A match is free money — often a 50% to 100% instant return."],
+          ["Contribute 2% for now.", 6, { save: 1200 },
+           "A good start, but you're leaving free match money on the table."],
+          ["Skip it until you earn more — right now every dollar in your paycheck feels needed, and retirement is decades away.", 2, {},
+           "Every year you wait costs you the match AND years of growth."]
+        ] },
+
+      { stage: 2, title: "Your emergency fund",
+        q: "How much do you keep for emergencies?",
+        o: [
+          ["Build up 3–6 months of expenses in a high-yield savings account.", 10, { cashYear: 1500 },
+           "An emergency fund turns a crisis into an inconvenience — and keeps you off credit cards."],
+          ["Keep about $500 on hand.", 5, { cashYear: 300 },
+           "Better than nothing, but most emergencies cost more than $500."],
+          ["Nothing — that's what credit cards are for.", 1, {},
+           "Using credit cards as an emergency fund means paying 22% interest on every surprise."]
+        ] },
+
+      { stage: 2, title: "Your first home?",
+        q: "You're thinking about buying a home.",
+        o: [
+          ["Take a free homebuyer class, use a first-time buyer program, and buy below what the lender approves.", 10, { homeEq: 12000, homeGain: 4000, cashYear: -300 },
+           "Buying within your means builds equity AND leaves room to keep saving."],
+          ["Keep renting for now and invest what you would have spent on a down payment.", 7, { save: 2000 },
+           "Renting can be smart when you invest the difference. Homeownership is one path to wealth, not the only one."],
+          ["Buy the most expensive home the lender will approve — they checked your finances, so they wouldn't approve more than you can afford.", 4, { homeEq: 12000, homeGain: 5000, cashYear: -1500, save: -1000 },
+           "You're “house rich, cash poor.” Big payments crowd out saving and investing."],
+          ["Sign a “rent-to-own” contract with high fees and no inspection.", 2, { cost: 6000 },
+           "Some rent-to-own deals let you lose everything you paid if you miss one payment. Always get legal advice first."]
+        ] },
+
+      { stage: 2, title: "Tackling debt",
+        q: "You have some credit card debt. What's your plan?",
+        o: [
+          ["Pay the minimum on everything, and put an extra $200 a month on the highest-interest card.", 10, { debtPay: 2400 },
+           "This is the “avalanche” method — it saves the most money on interest."],
+          ["Move the balance to a 0% card and keep paying the same amount.", 8, { debtPay: 2000 },
+           "Smart if you pay it off before the 0% period ends."],
+          ["Sign up with a debt settlement company that says it can cut your debt in half — their ads say it's fast and fully legal.", 3, { cost: 2500 },
+           "Settlement companies charge big fees, and your credit takes a hit. Try a nonprofit credit counselor first."],
+          ["Just pay the minimums.", 2, {},
+           "Minimums barely cover interest, so the balance hardly moves."]
+        ] },
+
+      { stage: 2, title: "Life insurance",
+        q: "People depend on your income now. Do you get life insurance?",
+        o: [
+          ["Buy an affordable term life policy that covers the years your family depends on you.", 10, { flags: ["life"] },
+           "Term life is usually the cheapest way to protect your family if something happens to you."],
+          ["Buy an expensive whole life policy from a friend who just started selling insurance — it builds “cash value,” they say.", 5, { flags: ["life"], save: -1000 },
+           "You're protected, but the high cost cuts into your investing. Compare before you buy."],
+          ["Skip it — you're young and healthy.", 2, {},
+           "That's exactly when it's cheapest. Without it, your family could be left with nothing."]
+        ] },
+
+      { stage: 2, title: "You got a raise",
+        q: "Your pay goes up by $5,000 a year.",
+        o: [
+          ["Send half to investing and half to savings — and keep living on your old budget.", 10, { save: 2500, cashYear: 2500 },
+           "Avoiding “lifestyle creep” is one of the fastest ways to build wealth."],
+          ["Split it three ways: investing, savings, and a little fun.", 8, { save: 1500, cashYear: 1500 },
+           "Balanced and sustainable."],
+          ["Upgrade to a bigger apartment and a nicer car — you've worked hard for years, and a raise is exactly what makes it affordable.", 3, { cashYear: -1000 },
+           "The upgrades cost more than the raise, so you're saving less than before."]
+        ] },
+
+      /* ===== STAGE 3 (35–50) ===== */
+      { stage: 3, title: "Your kids' future",
+        q: "You want to help your kids (or nieces and nephews) with college.",
+        o: [
+          ["Open a 529 college savings plan with $100 a month, while keeping your own retirement on track.", 10, { save: 1200 },
+           "A 529 grows tax-free for education. And protecting your retirement first means you won't depend on your kids later."],
+          ["Pause your retirement savings to pay for their college.", 4, { save: -2500 },
+           "Students can borrow for college. You can't borrow for retirement."],
+          ["Figure it out when they're 18.", 5, {},
+           "Starting early lets small amounts grow."]
+        ] },
+
+      { stage: 3, title: "Your will and paperwork",
+        q: "Your friend just went through a messy family situation after a parent passed without a will.",
+        o: [
+          ["Write a will, name beneficiaries on every account, and set up a power of attorney and health care proxy.", 10, { flags: ["will", "benef", "poa"], cost: 500 },
+           "These documents decide who gets what and who can make decisions if you can't. Many legal aid groups help for free or low cost."],
+          ["Just name beneficiaries on your 401(k) and life insurance.", 6, { flags: ["benef"] },
+           "Beneficiaries are powerful — they override a will for those accounts — but everything else is still unprotected."],
+          ["You're too young to worry about that — you don't own much yet, and paperwork like that is for older people with big estates.", 2, {},
+           "No one plans to need these documents. Without them, state law and courts decide."]
+        ] },
+
+      { stage: 3, title: "Growing your investments",
+        q: "Your 401(k) lets you automatically raise your savings by 1% each year.",
+        o: [
+          ["Turn on the automatic 1% yearly increase.", 10, { save: 3000 },
+           "You barely notice 1% at a time, but it adds up to a big difference over 15 years."],
+          ["Keep your savings the same.", 6, {},
+           "Steady is good. Small increases would do even more."],
+          ["Lower your contributions to afford a boat.", 2, { save: -1500 },
+           "The boat loses value. The investments would have grown."]
+        ] },
+
+      { stage: 3, title: "A side business",
+        q: "You have an idea for a side business.",
+        o: [
+          ["Start small while keeping your job, use a separate bank account, and grow slowly with your own savings.", 9, { cost: 2000, cashYear: 1500 },
+           "Small, steady, and separate. This is how many successful businesses begin."],
+          ["Quit your job and fund it with credit cards.", 2, { card: 20000, cashYear: -1000 },
+           "Most new businesses take time to profit. Credit cards at 22% make that time very expensive."],
+          ["Keep the idea in your head for “someday” — starting a business is risky, and you'd rather wait until the timing is perfect.", 5, {},
+           "No risk — but no reward either. Testing small is often the smart middle ground."]
+        ] },
+
+      { stage: 3, title: "Your home's value went up",
+        q: "A lender offers a “cash-out refinance” on your home.",
+        o: [
+          ["Say no, and make one extra mortgage payment a year instead.", 10, { homeGain: 1000 },
+           "Extra payments build equity and save years of interest."],
+          ["Use a home equity line to pay off 22% credit card debt — then cut up the cards.", 7, { homeToCard: true },
+           "It can save interest, but your home is now on the line. Only works if you don't run the cards back up."],
+          ["Take $30,000 cash out for a vacation and a new truck.", 2, { homeEq: -30000 },
+           "You turned home equity into things that lose value — and a bigger mortgage."]
+        ] },
+
+      { stage: 3, title: "Talking money with kids",
+        q: "Your teenager just got their first part-time job.",
+        o: [
+          ["Help them open a custodial Roth IRA and talk openly about saving, credit, and investing.", 10, { flags: ["talk"] },
+           "A teen with earned income can start a Roth IRA. Talking about money is how wealth knowledge passes down."],
+          ["Give them advice when they ask.", 5, {},
+           "Helpful, but teens often don't know what to ask."],
+          ["Money talk is private — they'll learn on their own.", 2, {},
+           "Silence about money is one reason financial knowledge doesn't pass between generations."]
+        ] },
+
+      /* ===== STAGE 4 (50–65) ===== */
+      { stage: 4, title: "Catch-up time",
+        q: "After 50, you're allowed to put extra “catch-up” money into your 401(k) and IRA.",
+        o: [
+          ["Use catch-up contributions to save more.", 10, { save: 6000 },
+           "Your peak earning years plus catch-up contributions can make up for a late start."],
+          ["Keep saving the same amount.", 6, {},
+           "Steady — but this is a great window to boost savings."],
+          ["Pause saving to help your adult kids with their bills.", 3, { save: -3000 },
+           "Helping is loving, but underfunding your retirement may mean they have to support you later."]
+        ] },
+
+      { stage: 4, title: "When to claim Social Security",
+        q: "You're planning when to start Social Security.",
+        o: [
+          ["Check your estimate at ssa.gov and plan to wait until full retirement age or later, if you can.", 10, {},
+           "Claiming early permanently reduces your monthly check. Waiting past full retirement age (up to 70) increases it."],
+          ["Claim at 62, the first chance you get — you paid into it your whole life, and nobody knows how long they'll live.", 4, {},
+           "Sometimes claiming early makes sense, but it should be a decision — not a default. The reduction is permanent."],
+          ["Don't think about it until you get there.", 5, {},
+           "Knowing your numbers early helps you plan work, savings, and health care."]
+        ] },
+
+      { stage: 4, title: "Long-term care",
+        q: "Your aunt needed nursing home care, and it cost over $8,000 a month.",
+        o: [
+          ["Talk with family about a plan, and look into long-term care insurance while you're still healthy.", 10, { flags: ["ltc"], cost: 2000 },
+           "Medicare does NOT cover most long-term care. Planning early gives you more options."],
+          ["Assume Medicare will cover it.", 2, {},
+           "This is a very common and costly myth. Medicare covers only short-term skilled care."],
+          ["Plan to move in with your kids when the time comes — you raised them, so they'll naturally take care of you. No need to ask.", 4, {},
+           "Family care can work, but it needs a real conversation first."]
+        ] },
+
+      { stage: 4, title: "Your investment mix",
+        q: "You're 15 years from retirement. How are your investments set up?",
+        o: [
+          ["Rebalance to a mix that fits your timeline (like a target-date fund) and keep investing.", 10, {},
+           "As retirement gets closer, a balanced mix reduces the risk of a big drop right when you need the money."],
+          ["Move everything into cash to be safe.", 4, { invToCash: 1 },
+           "Your money stops growing — and inflation slowly shrinks it."],
+          ["Put everything into one hot stock to “catch up.”", 2, { invLoss: 0.4 },
+           "The stock dropped 40%. Putting all your eggs in one basket is risky at any age."]
+        ] },
+
+      { stage: 4, title: "Debt before retirement",
+        q: "You'd like to retire in 10 years.",
+        o: [
+          ["Focus on paying off high-interest debt and keeping housing costs manageable before you retire.", 10, { debtPay: 3000 },
+           "Entering retirement without big debt payments makes your savings last much longer."],
+          ["Take out a new 30-year mortgage for a bigger house — rates look good, and you'll have room for the grandkids to visit.", 3, { cashYear: -2000 },
+           "Big payments on a fixed retirement income can be very stressful."],
+          ["Keep things as they are.", 6, {},
+           "Not bad — but lowering debt now gives you more freedom later."]
+        ] },
+
+      /* ===== STAGE 5 (65+) ===== */
+      { stage: 5, title: "Updating your estate plan",
+        q: "It's been years since you looked at your will and beneficiaries.",
+        o: [
+          ["Update your will, beneficiaries, and power of attorney, and tell your executor where everything is.", 10, { flags: ["will", "benef", "poa"] },
+           "Up-to-date paperwork keeps your wealth out of court delays and family fights."],
+          ["Write your wishes on a note, sign it, and put it in your dresser drawer where your family will be sure to find it.", 3, {},
+           "An unsigned note often isn't legally valid. A real will is needed."],
+          ["Leave it — everyone knows what you want.", 1, {},
+           "Without legal documents, state law decides, no matter what you said."]
+        ] },
+
+      { stage: 5, title: "A call from your “grandson”",
+        q: "A crying voice says, “Grandma, it's me — I'm in jail and need $5,000 in gift cards. Don't tell Mom!”",
+        o: [
+          ["Hang up and call your grandson directly — and set up a family code word.", 10, { flags: ["scam"] },
+           "This is the grandparent scam, and AI can even clone voices. Always verify directly."],
+          ["Ask a few questions only he would know, then decide.", 6, { flags: ["scam"] },
+           "Smart instinct, but scammers can find a lot online. Calling him directly is safest."],
+          ["Buy the gift cards — family comes first.", 0, { cost: 5000 },
+           "The money went to scammers. No real jail or lawyer takes gift cards."]
+        ] },
+
+      { stage: 5, title: "The family money meeting",
+        q: "Your family has never talked openly about money.",
+        o: [
+          ["Hold a family meeting: share where documents are, your wishes, and who your power of attorney is.", 10, { flags: ["talk"] },
+           "Open conversations prevent confusion and conflict — and pass on knowledge, not just money."],
+          ["Tell only your oldest child.", 5, {},
+           "Better than nothing, but others may feel left out or be unprepared."],
+          ["Keep it private. They'll figure it out.", 2, {},
+           "Silence can leave loved ones confused, stressed, and open to conflict or scams."]
+        ] },
+
+      { stage: 5, title: "Giving while you're living",
+        q: "You'd like to help your grandkids now.",
+        o: [
+          ["Help with their 529 plans or first Roth IRAs — within a plan that protects your own needs.", 10, { inv: -5000, flags: ["talk"] },
+           "Giving wisely now lets you see the impact and teach good habits at the same time."],
+          ["Give large sums whenever family asks — you can't take it with you, and you'd rather see them enjoy it now.", 4, { invLoss: 0.25 },
+           "Generous — but it put your own care and independence at risk."],
+          ["Give nothing now and make no plan.", 5, {},
+           "Your money is safe, but a plan helps your wishes actually happen."]
+        ] },
+
+      { stage: 5, title: "Making your money last",
+        q: "How do you take money out of your retirement savings?",
+        o: [
+          ["Make a steady withdrawal plan (many start around 4% a year) with help from a fee-only fiduciary advisor.", 10, {},
+           "A fiduciary must put your interests first. A steady plan helps your money last."],
+          ["Buy the product you heard about at a free-lunch seminar — the speaker promised “guaranteed income” with “no risk.”", 3, { invLoss: 0.1 },
+           "“Free lunch” seminars often push high-fee products. Always ask how the advisor is paid."],
+          ["Withdraw big amounts early for travel and figure out the rest later.", 3, { invLoss: 0.2 },
+           "Big early withdrawals can run your savings down too fast."]
+        ] },
+
+      /* ===== LIFE EVENTS (stages 2–4) ===== */
+      { event: true, title: "Laid off",
+        q: "Your company has layoffs, and you lose your job.",
+        o: [
+          ["File for unemployment, use your emergency fund, cut costs, and roll your 401(k) into an IRA.", 10, { cost: 6000 },
+           "This is exactly what an emergency fund is for. Keeping your retirement invested protects your future."],
+          ["Put everything on credit cards until you find a new job — it should only take a month or two, and you'll pay it off right after.", 3, { card: 6000 },
+           "You got through it, but the debt will follow you for years."],
+          ["Cash out your 401(k) to cover the bills.", 2, { invCash: [12000, 0.7], cost: 6000 },
+           "Early withdrawals usually mean taxes plus a 10% penalty — and that money stops growing forever."]
+        ] },
+
+      { event: true, title: "A medical bill",
+        q: "An unexpected $4,000 medical bill arrives.",
+        o: [
+          ["Ask for an itemized bill, apply for the hospital's financial assistance, and set up a payment plan.", 10, { cost: 1500 },
+           "Hospitals often have assistance programs, and bills often have errors. You cut the bill to $1,500."],
+          ["Pay it from your emergency fund.", 7, { cost: 4000 },
+           "Responsible — but checking the bill first could have saved money."],
+          ["Put it on a credit card.", 3, { card: 4000 },
+           "Medical offices usually offer 0% payment plans. A card turns it into 22% debt."],
+          ["Ignore it and hope it goes away.", 1, { card: 4500 },
+           "It went to collections with extra fees, and your credit took a hit."]
+        ] },
+
+      { event: true, title: "A parent needs care",
+        q: "Your mother has a stroke and needs daily help.",
+        o: [
+          ["Hold a family meeting to share tasks, and look into Medicaid, local aging services, and job-protected leave.", 10, { cost: 3000, flags: ["talk"] },
+           "Sharing the load and using available programs protects both your parent and your finances."],
+          ["Quit your job to care for her full-time — she took care of you your whole life, and you'll figure out the money as you go.", 4, { cost: 20000 },
+           "Your love is clear, but losing income and benefits for years is very costly. Explore support options first."],
+          ["Pay for everything yourself by withdrawing from your 401(k).", 3, { invCash: [15000, 0.7] },
+           "Taxes and penalties shrink the withdrawal, and your retirement takes a big hit."]
+        ] },
+
+      { event: true, title: "An inheritance",
+        q: "A relative leaves you $20,000.",
+        o: [
+          ["Pay off high-interest debt, top up your emergency fund, and invest the rest.", 10, { payDebt: 20000 },
+           "A windfall used this way can change your family's direction for decades."],
+          ["Lend it all to your cousin's new restaurant with no written agreement — you trust them, and they promised to pay you back with interest.", 3, {},
+           "The business struggled, and the money never came back. Put loans in writing — and only lend what you can afford to lose."],
+          ["Buy a new car and take a big vacation.", 2, { cash: 2000 },
+           "A little fun is fine, but most of a life-changing gift disappeared."]
+        ] },
+
+      { event: true, title: "A “bank” calls",
+        q: "A caller from your “bank's fraud department” says your account is compromised and you must move your savings to a “safe account.”",
+        o: [
+          ["Hang up and call the number on the back of your card.", 10, { flags: ["scam"] },
+           "Real banks never ask you to move money to a “safe account.” That's always a scam."],
+          ["Ask for their name and employee ID, then do what they say.", 1, { cashLoss: 0.8 },
+           "Scammers happily give fake names and IDs. You lost most of your savings."],
+          ["Move the money, but only half of it.", 1, { cashLoss: 0.4 },
+           "Half is still a lot to lose. Never move money because a caller tells you to."]
+        ] },
+
+      { event: true, title: "“Can you co-sign?”",
+        q: "A relative with poor credit asks you to co-sign a car loan.",
+        o: [
+          ["Say no kindly, and help them find a credit-builder loan or secured card instead.", 10, {},
+           "You protected your credit and still helped them build theirs."],
+          ["Give them a gift you can truly afford toward a cheaper used car.", 8, { cost: 1000 },
+           "Generous without legal risk."],
+          ["Co-sign — family is family.", 3, { card: 5000 },
+           "They missed payments, and you became responsible for the debt."]
+        ] },
+
+      { event: true, title: "Family land",
+        q: "Your grandparents' land passed down without a will. Now 12 cousins share it, and a developer offers one cousin cash for their share.",
+        o: [
+          ["Call a family meeting and get help from a legal aid or heirs' property program to put ownership in writing.", 10, { cost: 1500, flags: ["heirs"] },
+           "This is called “heirs' property.” Without clear title, one sale can lead to a forced sale of the whole property. Clearing title protects the land for future generations."],
+          ["Sell your share to the developer quickly for $3,000 — it's only a small piece split 12 ways, and cash in hand beats land you never visit.", 3, { cash: 3000, flags: ["heirsRisk"] },
+           "Selling shares to outsiders can let them force a sale of the entire property — often far below its value."],
+          ["Ignore it — it's not your problem.", 2, { flags: ["heirsRisk"] },
+           "Heirs' property is one of the leading causes of land loss for Black families in the U.S. Doing nothing puts it at risk."]
+        ] },
+
+      { event: true, title: "A big storm is coming",
+        q: "Forecasters warn of a major storm season in your area.",
+        o: [
+          ["Review your home or renters insurance, and add flood coverage if you need it.", 10, { cost: 400 },
+           "Standard policies usually don't cover floods. When the storm came, you were protected."],
+          ["Assume your policy covers everything.", 3, { cost: 9000 },
+           "Your policy didn't cover flood damage. Repairs cost $9,000."],
+          ["Cancel insurance to save money this year.", 1, { cost: 15000 },
+           "The storm hit, and you paid for everything yourself."]
+        ] },
+
+      { event: true, title: "The stock market crashes",
+        q: "The stock market drops 30%. The news is scary.",
+        o: [
+          ["Keep investing as planned. You don't need this money for years.", 10, {},
+           "Markets have historically recovered from crashes. You kept buying at lower prices, and your investments recovered."],
+          ["Stop investing for a couple of years until things calm down and the experts on TV say it's safe to get back in.", 5, { save: -1000 },
+           "You avoided buying during the dip — which is when prices were lowest."],
+          ["Sell everything and move it to cash.", 2, { invLoss: 0.3, invToCash: 1 },
+           "Selling locked in the 30% loss, and you missed the recovery."]
+        ] },
+
+      { event: true, title: "Car trouble",
+        q: "Your car needs a $2,500 repair to keep getting you to work.",
+        o: [
+          ["Get a second quote, then pay from your emergency fund.", 10, { cost: 2200 },
+           "A second quote saved money, and your emergency fund kept you out of debt."],
+          ["Put it on a credit card.", 4, { card: 2500 },
+           "It's fixed, but now it's growing at 22% interest."],
+          ["Take out a payday loan.", 1, { card: 3500 },
+           "Payday loans often charge fees equal to 300%+ a year. Many people end up borrowing again and again."]
+        ] },
+
+      { event: true, title: "A funeral with no plan",
+        q: "An uncle passes away with no life insurance. The family asks everyone to help with $8,000 in funeral costs.",
+        o: [
+          ["Pay your fair share, then get your own term life insurance and talk with family about plans.", 10, { cost: 2000, flags: ["life", "talk"] },
+           "Sadly, moments like this are often what finally get families talking — and protected."],
+          ["Put the whole $8,000 on your credit card so nobody else in the family has to worry about it during such a hard time.", 3, { card: 8000 },
+           "A generous heart, but splitting costs fairly protects you from years of debt."],
+          ["Contribute your share, and don't bring it up again.", 6, { cost: 2000 },
+           "You helped — but a planning conversation could protect the next generation from the same stress."]
+        ] },
+
+      { event: true, title: "Identity theft",
+        q: "You notice a credit card account on your credit report that you never opened.",
+        o: [
+          ["Freeze your credit at all three bureaus, dispute the account, and file a report at IdentityTheft.gov.", 10, {},
+           "Acting fast protects your credit and your savings."],
+          ["Call the card company to close the fake account — that should fix it, and a credit freeze sounds like a hassle you don't need.", 5, { cost: 500 },
+           "The thief opened another account before you froze your credit."],
+          ["Ignore it — it's probably a mistake.", 1, { card: 3000 },
+           "The debt grew and went to collections in your name."]
+        ] }
+    ];
+
+    const PROTECTIONS = [
+      { id: "fund", label: "Emergency savings of $10,000+" },
+      { id: "life", label: "Life insurance" },
+      { id: "will", label: "A will" },
+      { id: "benef", label: "Beneficiaries named on accounts" },
+      { id: "poa", label: "Power of attorney & health care proxy" },
+      { id: "talk", label: "Open family money conversations" },
+      { id: "ltc", label: "Long-term care plan" }
+    ];
+
+    const mainEl = document.getElementById("wgra-roadmap-main");
+    const progressEl = document.getElementById("wgra-roadmap-progress");
+    const rootEl = document.getElementById("wgra-roadmap-root");
+
+    let S = null;          // game state
+    let screen = "start";  // start, play, or results
+    let selectedChar = null;
+
+    // Prevent auto-scroll until the user interacts
+    let userInteracted = false;
+    ["click", "touchstart", "keydown", "wheel"].forEach(evt => {
+      window.addEventListener(evt, () => { userInteracted = true; }, { once: true, passive: true });
+    });
+
+    function scrollTo(el, block) {
+      if (!userInteracted || !el) return;
+      if (el === rootEl) { setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 80); return; }
+      setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: block || "start" }), 80);
+    }
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function money(n) {
+      const r = Math.round(n);
+      return (r < 0 ? "−$" : "$") + Math.abs(r).toLocaleString("en-US");
+    }
+
+    function signed(n) {
+      const r = Math.round(n);
+      return (r < 0 ? "−$" : "+$") + Math.abs(r).toLocaleString("en-US");
+    }
+
+    function esc(str) {
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function netWorth() {
+      return S.cash + S.inv + S.homeEq - S.card - S.loans;
+    }
+
+    function hasFlag(id) {
+      if (id === "fund") return S.cash >= 10000;
+      return S.flags.has(id);
+    }
+
+    /* ---------------- START SCREEN ---------------- */
+    function renderStart() {
+      screen = "start";
+      rootEl.classList.add("is-start");
+      progressEl.textContent = "Choose your starting point";
+      mainEl.innerHTML = `
+        <div class="wgra-roadmap-card">
+          <h3 class="wgra-roadmap-h3">Who are you at 18?</h3>
+          <p class="wgra-roadmap-copy">
+            You'll make 10 decisions across 5 life stages — some planned, some surprise life events.
+            Your investments grow over the years, debts cost interest, and the paperwork you do (or skip)
+            decides how much reaches the next generation. Every playthrough is different.
+          </p>
+          <div class="wgra-roadmap-chars" id="wgra-roadmap-chars">
+            ${CHARACTERS.map(c => `
+              <button type="button" class="wgra-roadmap-char${c.id === selectedChar ? " is-selected" : ""}" data-char="${c.id}" aria-pressed="${c.id === selectedChar}">
+                <strong>${c.name}</strong>${c.desc}
+              </button>`).join("")}
+          </div>
+          <div class="wgra-roadmap-controls">
+            <button type="button" class="wgra-roadmap-btn" id="wgra-roadmap-begin" ${selectedChar ? "" : "disabled"}>Begin my roadmap</button>
+          </div>
+        </div>
+      `;
+
+      const charsEl = document.getElementById("wgra-roadmap-chars");
+      const beginBtn = document.getElementById("wgra-roadmap-begin");
+      charsEl.addEventListener("click", e => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+        selectedChar = btn.dataset.char;
+        charsEl.querySelectorAll("button").forEach(b => {
+          const on = b === btn;
+          b.classList.toggle("is-selected", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        beginBtn.disabled = false;
+      });
+      beginBtn.addEventListener("click", startGame);
+    }
+
+    /* ---------------- GAME SETUP ---------------- */
+    function startGame() {
+      const c = CHARACTERS.find(x => x.id === selectedChar);
+      S = {
+        char: c,
+        cash: c.start.cash, inv: 0, card: c.start.card, loans: 0, loanPay: 0,
+        save: 0, cashYear: c.start.cashYear, debtPay: 0, homeEq: 0, homeGain: 0,
+        interestPaid: 0, flags: new Set(), points: 0, log: [],
+        stage: 0, plan: buildPlan(c.id), step: 0, recap: null
+      };
+      renderStep();
+    }
+
+    // 2 decisions per stage: stage 1 = your path + 1 more; stages 2–4 = 1 choice + 1 life event;
+    // stage 5 = the estate plan (every game) + 1 more legacy decision
+    function buildPlan(charId) {
+      const events = shuffle(DECISIONS.filter(d => d.event));
+      const pick = (stage, n, filter) => shuffle(DECISIONS.filter(d => d.stage === stage && !d.event && (filter ? filter(d) : true))).slice(0, n);
+      return [
+        [pick(1, 1, d => d.who === charId)[0], pick(1, 1, d => !d.who)[0]],
+        [pick(2, 1)[0], events[0]],
+        [pick(3, 1)[0], events[1]],
+        [pick(4, 1)[0], events[2]],
+        [DECISIONS.find(d => d.title === "Updating your estate plan"), pick(5, 1, d => d.title !== "Updating your estate plan")[0]]
+      ];
+    }
+
+    /* ---------------- MONEY MODEL ---------------- */
+    function applyFx(fx) {
+      const before = { cash: S.cash, inv: S.inv, debt: S.card + S.loans, home: S.homeEq };
+      const lines = [];
+
+      if (fx.cash) S.cash += fx.cash;
+      if (fx.inv) S.inv = Math.max(0, S.inv + fx.inv);
+      if (fx.card) S.card += fx.card;
+      if (fx.loans) { S.loans += fx.loans; S.loanPay += fx.loans / 10; }
+      if (fx.homeEq) S.homeEq = Math.max(0, S.homeEq + fx.homeEq);
+      if (fx.cashLoss) S.cash *= (1 - fx.cashLoss);
+      if (fx.invLoss) S.inv *= (1 - fx.invLoss);
+      if (fx.invCash) {
+        const take = Math.min(S.inv, fx.invCash[0]);
+        S.inv -= take;
+        S.cash += take * fx.invCash[1];
+        lines.push("Cashed out " + money(take) + " of investments — kept only " + money(take * fx.invCash[1]) + " after taxes and penalties");
+      }
+      if (fx.cost) {
+        const fromCash = Math.min(Math.max(0, S.cash), fx.cost);
+        S.cash -= fromCash;
+        const rest = fx.cost - fromCash;
+        if (rest > 0) {
+          S.card += rest;
+          lines.push("Your savings covered " + money(fromCash) + ". The other " + money(rest) + " went on a credit card");
+        }
+      }
+      if (fx.payDebt) {
+        let amt = fx.payDebt;
+        const p1 = Math.min(S.card, amt); S.card -= p1; amt -= p1;
+        const p2 = Math.min(S.loans, amt); S.loans -= p2; amt -= p2;
+        const toFund = Math.min(amt, 5000); S.cash += toFund; amt -= toFund;
+        S.inv += amt;
+      }
+      if (fx.homeToCard && S.card > 0) {
+        S.homeEq = Math.max(0, S.homeEq - S.card);
+        lines.push("Moved " + money(S.card) + " of card debt into your home equity line");
+        S.card = 0;
+      }
+      if (fx.invToCash) { S.cash += S.inv * fx.invToCash; S.inv *= (1 - fx.invToCash); }
+
+      if (fx.save) { S.save = Math.max(0, S.save + fx.save); lines.push("Yearly investing: " + signed(fx.save)); }
+      if (fx.cashYear) lines.push("Yearly savings: " + signed(fx.cashYear));
+      if (fx.cashYear) S.cashYear += fx.cashYear;
+      if (fx.debtPay) { S.debtPay = Math.max(0, S.debtPay + fx.debtPay); lines.push("Extra debt payments: " + signed(fx.debtPay) + " a year"); }
+      if (fx.homeGain) { S.homeGain = Math.max(0, S.homeGain + fx.homeGain); lines.push("Home equity growth: " + signed(fx.homeGain) + " a year"); }
+      if (fx.flags) fx.flags.forEach(f => S.flags.add(f));
+
+      if (S.cash < 0) { S.card += -S.cash; S.cash = 0; }
+
+      const after = { cash: S.cash, inv: S.inv, debt: S.card + S.loans, home: S.homeEq };
+      const d = (a, b, label) => { if (Math.round(b - a) !== 0) lines.unshift(label + ": " + signed(b - a)); };
+      d(before.home, after.home, "Home equity");
+      d(before.debt, after.debt, "Debt");
+      d(before.inv, after.inv, "Investments");
+      d(before.cash, after.cash, "Savings");
+
+      const protectNames = { life: "Life insurance", will: "Will", benef: "Beneficiaries", poa: "Power of attorney & health care proxy", talk: "Family money talk", ltc: "Long-term care plan", heirs: "Family land protected", scam: "Scam-smart" };
+      if (fx.flags) fx.flags.filter(f => protectNames[f]).forEach(f => lines.push("✔ " + protectNames[f]));
+      return lines;
+    }
+
+    function simulate(years) {
+      const start = { inv: S.inv, cash: S.cash, debt: S.card + S.loans, interest: S.interestPaid, nw: netWorth() };
+      for (let y = 0; y < years; y++) {
+        S.inv = S.inv * 1.07 + S.save;
+
+        const interest = S.card * 0.22 + S.loans * 0.06;
+        S.interestPaid += interest;          // minimum payments cover the interest
+        S.loans = Math.max(0, S.loans - S.loanPay);
+        if (S.loans === 0) S.loanPay = 0;
+
+        let extra = S.debtPay;
+        const p1 = Math.min(S.card, extra); S.card -= p1; extra -= p1;
+        const p2 = Math.min(S.loans, extra); S.loans -= p2; extra -= p2;
+        S.cash += extra;                     // no debt left → that money goes to savings
+
+        S.cash += S.cashYear;
+        if (S.cash < 0) { S.card += -S.cash; S.cash = 0; }
+
+        // Savings above a $1,000 cushion pay down 22% card debt
+        if (S.card > 0 && S.cash > 1000) {
+          const p3 = Math.min(S.card, S.cash - 1000);
+          S.card -= p3; S.cash -= p3;
+        }
+        S.homeEq += S.homeGain;
+      }
+      return {
+        years: years,
+        invGrowth: S.inv - start.inv,
+        interest: S.interestPaid - start.interest,
+        nwChange: netWorth() - start.nw
+      };
+    }
+
+    /* ---------------- STAGE SCREEN ---------------- */
+    function dashHtml() {
+      const nw = netWorth();
+      const debt = S.card + S.loans;
+      const prot = PROTECTIONS.filter(p => hasFlag(p.id)).length;
+      const stage = STAGES[S.stage];
+      return `
+        <div class="wgra-roadmap-dash">
+          <div class="wgra-roadmap-tile"><div class="wgra-roadmap-tile-label">Age</div><div class="wgra-roadmap-tile-value">${stage.from}</div></div>
+          <div class="wgra-roadmap-tile"><div class="wgra-roadmap-tile-label">Net worth</div><div class="wgra-roadmap-tile-value ${nw < 0 ? "is-neg" : "is-pos"}">${money(nw)}</div></div>
+          <div class="wgra-roadmap-tile"><div class="wgra-roadmap-tile-label">Investments</div><div class="wgra-roadmap-tile-value">${money(S.inv)}</div></div>
+          <div class="wgra-roadmap-tile"><div class="wgra-roadmap-tile-label">Savings</div><div class="wgra-roadmap-tile-value">${money(S.cash)}</div></div>
+          <div class="wgra-roadmap-tile"><div class="wgra-roadmap-tile-label">Debt</div><div class="wgra-roadmap-tile-value ${debt > 0 ? "is-neg" : ""}">${money(debt)}</div></div>
+          <div class="wgra-roadmap-tile"><div class="wgra-roadmap-tile-label">Home equity</div><div class="wgra-roadmap-tile-value">${money(S.homeEq)}</div></div>
+          <div class="wgra-roadmap-tile"><div class="wgra-roadmap-tile-label">Interest paid</div><div class="wgra-roadmap-tile-value ${S.interestPaid > 0 ? "is-neg" : ""}">${money(S.interestPaid)}</div></div>
+          <div class="wgra-roadmap-tile"><div class="wgra-roadmap-tile-label">Protection</div><div class="wgra-roadmap-tile-value">${prot} / ${PROTECTIONS.length}</div></div>
+        </div>
+      `;
+    }
+
+    function verdict(p) {
+      if (p >= 9) return { text: "Strong wealth move ✔", cls: "is-strong", short: "Strong", vcls: "wgra-v-strong" };
+      if (p >= 5) return { text: "A mixed choice ⚖️", cls: "is-mixed", short: "Mixed", vcls: "wgra-v-mixed" };
+      return { text: "High-risk path ⚠️", cls: "is-risky", short: "Risky", vcls: "wgra-v-risky" };
+    }
+
+    function renderStep() {
+      screen = "play";
+      rootEl.classList.remove("is-start");
+      const stage = STAGES[S.stage];
+      const d = S.plan[S.stage][S.step];
+      const decisionNum = S.stage * 2 + S.step + 1;
+      progressEl.textContent = "Stage " + (S.stage + 1) + " of 5 · " + stage.name + " (" + stage.ages + ") · Decision " + decisionNum + " of 10";
+
+      const order = shuffle(d.o.map((o, i) => i));
+      const letters = ["A", "B", "C", "D"];
+
+      mainEl.innerHTML = `
+        ${S.recap ? '<div class="wgra-roadmap-recap">' + S.recap + "</div>" : ""}
+        ${dashHtml()}
+        <div class="wgra-roadmap-card" id="wgra-roadmap-decision">
+          <span class="wgra-roadmap-tag${d.event ? " is-event" : ""}">${d.event ? "Life event" : stage.name}</span>
+          <h3 class="wgra-roadmap-h3">${esc(d.title)}</h3>
+          <div class="wgra-roadmap-question">${esc(d.q)}</div>
+          <div class="wgra-roadmap-options" id="wgra-roadmap-options">
+            ${order.map((oi, k) => `
+              <button type="button" class="wgra-roadmap-option" data-oi="${oi}">
+                <span class="wgra-roadmap-option-label">${letters[k]}</span><span>${esc(d.o[oi][0])}</span>
+              </button>`).join("")}
+          </div>
+          <div id="wgra-roadmap-feedback"></div>
+        </div>
+        <div class="wgra-roadmap-controls">
+          <button type="button" class="wgra-roadmap-btn wgra-roadmap-btn-secondary" id="wgra-roadmap-restart">Start over</button>
+          <button type="button" class="wgra-roadmap-btn" id="wgra-roadmap-next" disabled>Choose a path</button>
+        </div>
+      `;
+
+      const optsEl = document.getElementById("wgra-roadmap-options");
+      const fbEl = document.getElementById("wgra-roadmap-feedback");
+      const nextBtn = document.getElementById("wgra-roadmap-next");
+      let answered = false;
+
+      optsEl.addEventListener("click", e => {
+        const btn = e.target.closest("button");
+        if (!btn || answered) return;
+        answered = true;
+        const opt = d.o[parseInt(btn.dataset.oi, 10)];
+        const bestPts = Math.max.apply(null, d.o.map(o => o[1]));
+
+        optsEl.querySelectorAll("button").forEach(b => {
+          b.disabled = true;
+          if (d.o[parseInt(b.dataset.oi, 10)][1] === bestPts) b.classList.add("is-best");
+        });
+        btn.classList.add("is-chosen");
+
+        const lines = applyFx(opt[2]);
+        S.points += opt[1];
+        const v = verdict(opt[1]);
+        const best = d.o.find(o => o[1] === bestPts);
+        S.log.push({ stage: stage, title: d.title, choice: opt[0], points: opt[1], why: opt[3], best: best[0], v: v });
+
+        fbEl.innerHTML =
+          '<div class="wgra-roadmap-feedback ' + v.cls + '"><strong>' + v.text + " (" + opt[1] + "/10)</strong> " + esc(opt[3]) +
+          (lines.length ? "<ul>" + lines.map(l => "<li>" + esc(l) + "</li>").join("") + "</ul>" : "") +
+          (opt[1] < bestPts ? '<div style="margin-top:8px;"><strong>Strongest move here:</strong> ' + esc(best[0]) + "</div>" : "") +
+          "</div>";
+
+        const lastInStage = S.step === 1;
+        const lastOverall = lastInStage && S.stage === STAGES.length - 1;
+        nextBtn.textContent = lastOverall ? "See my family wealth story" : (lastInStage ? "Live the next " + (STAGES[S.stage].to - STAGES[S.stage].from) + " years →" : "Next decision →");
+        nextBtn.disabled = false;
+        scrollTo(fbEl, "center");
+      });
+
+      nextBtn.addEventListener("click", () => {
+        if (!answered) return;
+        if (S.step === 0) {
+          S.step = 1;
+          S.recap = null;
+          renderStep();
+          scrollTo(document.getElementById("wgra-roadmap-decision"), "center");
+          return;
+        }
+        // End of stage: time passes
+        const yrs = STAGES[S.stage].to - STAGES[S.stage].from;
+        if (yrs > 0) {
+          const r = simulate(yrs);
+          S.recap = "<strong>Ages " + STAGES[S.stage].from + "–" + STAGES[S.stage].to + ":</strong> " +
+            "your investments grew by " + money(r.invGrowth) +
+            (r.interest > 1 ? ", you paid " + money(r.interest) + " in interest" : ", and you paid no interest") +
+            ", and your net worth changed by " + signed(r.nwChange) + ".";
+        }
+        if (S.stage === STAGES.length - 1) {
+          renderResults();
+          return;
+        }
+        S.stage++;
+        S.step = 0;
+        renderStep();
+        scrollTo(rootEl);
+      });
+
+      document.getElementById("wgra-roadmap-restart").addEventListener("click", () => { S = null; renderStart(); scrollTo(rootEl); });
+    }
+
+    /* ---------------- RESULTS ---------------- */
+    function futureValue(monthly, years) {
+      const r = 0.07 / 12;
+      const n = years * 12;
+      return monthly * ((Math.pow(1 + r, n) - 1) / r);
+    }
+
+    function renderResults() {
+      screen = "results";
+      rootEl.classList.remove("is-start");
+      progressEl.textContent = "Roadmap complete — your family wealth story";
+      const nw = netWorth();
+      const protCount = PROTECTIONS.filter(p => hasFlag(p.id)).length;
+
+      // How much of your wealth is likely to reach the next generation (game estimate)
+      let keep = 0.7;
+      ["will", "benef", "poa", "talk", "ltc"].forEach(f => { if (S.flags.has(f)) keep += 0.06; });
+      if (S.flags.has("heirsRisk") && !S.flags.has("heirs")) keep -= 0.1;
+      keep = Math.max(0.4, Math.min(1, keep));
+      const passed = Math.max(0, nw) * keep;
+
+      const score = S.points; // 10 decisions × 10 points
+      let tagline;
+      if (score >= 85) tagline = "Legacy Builder — your roadmap supports you AND the next generation.";
+      else if (score >= 70) tagline = "Wealth Builder — strong habits, with a few upgrades still available.";
+      else if (score >= 55) tagline = "Momentum Starter — some solid moves. A few changes could rewrite the story.";
+      else tagline = "Comeback Story — every family has a starting point. New habits now can change the next generation.";
+
+      const fv25 = futureValue(200, 40);
+      const fv35 = futureValue(200, 30);
+
+      mainEl.innerHTML = `
+        <div class="wgra-roadmap-card">
+          <div class="wgra-roadmap-score-main">Family Wealth Score: ${score} / 100</div>
+          <div class="wgra-roadmap-score-tagline">${tagline}<br>Starting point: ${S.char.name}</div>
+          <div class="wgra-roadmap-note" style="text-align:center;margin-bottom:14px;">Your score measures the quality of your decisions. Your net worth also depends on which life events came your way — just like real life.</div>
+
+          <h3 class="wgra-roadmap-h3">Your finances at 65</h3>
+          <table class="wgra-roadmap-table">
+            <tr><td>Investments</td><td>${money(S.inv)}</td></tr>
+            <tr><td>Savings</td><td>${money(S.cash)}</td></tr>
+            <tr><td>Home equity</td><td>${money(S.homeEq)}</td></tr>
+            <tr><td>Debt</td><td>${money(-(S.card + S.loans))}</td></tr>
+            <tr class="is-total"><td>Net worth</td><td>${money(nw)}</td></tr>
+            <tr><td>Lifetime interest paid on debt</td><td>${money(S.interestPaid)}</td></tr>
+          </table>
+        </div>
+
+        <div class="wgra-roadmap-card">
+          <h3 class="wgra-roadmap-h3">What reaches the next generation</h3>
+          <p class="wgra-roadmap-copy">
+            Estimated amount passed on: <strong style="color:#31e27f;font-size:20px;">${money(passed)}</strong>
+            (${Math.round(keep * 100)}% of your net worth). Without a will, beneficiaries, and open family conversations,
+            more wealth is lost to court delays, fees, conflict, and scams.
+          </p>
+          <strong>Your family protection checklist (${protCount} of ${PROTECTIONS.length}):</strong>
+          <ul class="wgra-roadmap-checklist">
+            ${PROTECTIONS.map(p => "<li>" + (hasFlag(p.id) ? "✅ " : "⬜ ") + p.label + "</li>").join("")}
+          </ul>
+          <div class="wgra-roadmap-note">This is a simplified game model, not a financial prediction. Real results depend on markets, laws, and your situation.</div>
+        </div>
+
+        <div class="wgra-roadmap-card">
+          <h3 class="wgra-roadmap-h3">The power of starting early</h3>
+          <div class="wgra-roadmap-highlight">
+            Investing <strong>$200 a month</strong> at about 7% a year:<br>
+            Start at <strong>25</strong> → about <strong>${money(fv25)}</strong> by 65.<br>
+            Start at <strong>35</strong> → about <strong>${money(fv35)}</strong> by 65.<br>
+            Waiting 10 years costs about <strong>${money(fv25 - fv35)}</strong> — even though you'd only put in $24,000 less.
+          </div>
+        </div>
+
+        <div class="wgra-roadmap-card">
+          <h3 class="wgra-roadmap-h3">Your decisions</h3>
+          <ol class="wgra-roadmap-review">
+            ${S.log.map(l => `
+              <li><strong>${esc(l.title)}</strong> (${l.stage.ages}) — <span class="${l.v.vcls}">${l.v.short}, ${l.points}/10</span><br>
+                You chose: ${esc(l.choice)}<br>
+                ${l.points < 10 ? "Strongest move: " + esc(l.best) + "<br>" : ""}
+                💡 ${esc(l.why)}
+              </li>`).join("")}
+          </ol>
+        </div>
+
+        <div class="wgra-roadmap-controls">
+          <button type="button" class="wgra-roadmap-btn" id="wgra-roadmap-again">Play again</button>
+        </div>
+      `;
+
+      document.getElementById("wgra-roadmap-again").addEventListener("click", () => { S = null; renderStart(); scrollTo(rootEl); });
+      scrollTo(rootEl);
+    }
+
+    // Android back button: during a roadmap, ask before quitting; from the
+    // results, go back to the start screen. On the start screen, let the app
+    // ask before exiting.
+    window.gwrBack = function () {
+      if (screen === "play") {
+        if (window.confirm("Leave this roadmap? Your progress will be lost.")) { S = null; renderStart(); scrollTo(rootEl); }
+        return true;
+      }
+      if (screen === "results") {
+        S = null; renderStart(); scrollTo(rootEl);
+        return true;
+      }
+      return false;
+    };
+
+    renderStart();
+  })();
+</script>
+<script>
+(function () {
+  "use strict";
+  var splash = document.getElementById("app-splash");
+  setTimeout(function () {
+    splash.classList.add("out");
+    setTimeout(function () { if (splash.parentNode) splash.parentNode.removeChild(splash); }, 500);
+  }, 1300);
+
+  var scrim = document.getElementById("scrim");
+  function openSheetEl() { return document.querySelector(".sheet.open"); }
+  function closeSheets() {
+    Array.prototype.forEach.call(document.querySelectorAll(".sheet.open"), function (s) { s.classList.remove("open"); });
+    scrim.classList.remove("open");
   }
-}
-
-function renderStage() {
-  const s = STAGES[stageIdx];
-  document.getElementById('stage-num').textContent = `Stage ${stageIdx + 1} of ${STAGES.length}`;
-  document.getElementById('stage-progress').textContent = `Wealth Score ${metrics.wealth}`;
-  document.getElementById('stage-title').textContent = s.title;
-  document.getElementById('stage-scenario').textContent = s.scenario;
-
-  const ch = document.getElementById('stage-choices');
-  ch.innerHTML = '';
-  s.choices.forEach((c, i) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'choice';
-    btn.innerHTML = `<span class="lead">${String.fromCharCode(65 + i)}.</span>${c.text}`;
-    btn.addEventListener('click', () => pickChoice(i, btn));
-    ch.appendChild(btn);
+  function openSheet(id) {
+    closeSheets();
+    var s = document.getElementById(id);
+    if (!s) return;
+    s.classList.add("open");
+    scrim.classList.add("open");
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-sheet],[data-close]") : null;
+    if (t && t.hasAttribute("data-sheet")) { openSheet(t.getAttribute("data-sheet")); return; }
+    if (t && t.hasAttribute("data-close")) { closeSheets(); return; }
+    if (e.target === scrim) closeSheets();
   });
 
-  document.getElementById('stage-feedback').style.display = 'none';
-  document.getElementById('btn-next').disabled = true;
-  document.getElementById('btn-next').textContent = stageIdx === STAGES.length - 1 ? 'See Results' : 'Next Stage';
-  document.getElementById('progress-fill').style.width = `${(stageIdx / STAGES.length) * 100}%`;
-  renderMetrics('metrics-grid');
-}
-
-function pickChoice(i, btnEl) {
-  const s = STAGES[stageIdx];
-  const c = s.choices[i];
-  document.querySelectorAll('#stage-choices .choice').forEach(b => {
-    b.disabled = true; b.style.opacity = '0.6'; b.style.cursor = 'default';
-  });
-  btnEl.classList.add('selected'); btnEl.style.opacity = '1';
-
-  applyDeltas(c.deltas);
-  picks.push({ stage: s.title, choice: c.text, good: c.good });
-
-  const fb = document.getElementById('stage-feedback');
-  fb.className = 'feedback ' + (c.good ? 'good' : 'bad');
-  fb.style.display = 'block';
-  fb.innerHTML =
-    `<div class="fb-title">${c.good ? 'Smart move' : 'Risky move'}</div>` +
-    `<div class="fb-body">${c.feedback}</div>` +
-    `<div class="lesson"><b>Money lesson:</b> ${c.lesson}</div>`;
-
-  document.getElementById('stage-progress').textContent = `Wealth Score ${metrics.wealth}`;
-  document.getElementById('progress-fill').style.width = `${((stageIdx + 1) / STAGES.length) * 100}%`;
-  document.getElementById('btn-next').disabled = false;
-  renderMetrics('metrics-grid');
-}
-
-function goNext() {
-  if (stageIdx >= STAGES.length - 1) showResults();
-  else { stageIdx++; renderStage(); }
-}
-
-function ratingFor(score) {
-  if (score >= 90) return 'Legacy Builder';
-  if (score >= 75) return 'Wealth Strategist';
-  if (score >= 60) return 'Foundation Builder';
-  if (score >= 40) return 'Still Building';
-  return 'Restart the Roadmap';
-}
-
-function pickBestWorst() {
-  let best = null, worst = null;
-  for (const m of METRICS) {
-    const g = metricGoodness(m.key, metrics[m.key]);
-    if (best === null || g > best.g)  best  = { label: m.label, g };
-    if (worst === null || g < worst.g) worst = { label: m.label, g };
-  }
-  return { best, worst };
-}
-
-function lessonsFromPicks() {
-  const goodPicks = picks.filter(p => p.good).length;
-  const out = [];
-  if (goodPicks >= STAGES.length - 2) {
-    out.push('You stayed disciplined in almost every stage. Now focus on widening the income side, not just the saving side.');
-  } else if (goodPicks <= 3) {
-    out.push('Most setbacks came from chasing comfort or status now. A written budget and a small emergency fund target will reset the story.');
-  } else {
-    out.push('You mixed strong moves with weaker ones. Pick the two metrics that scored lowest and protect them first next time.');
-  }
-  const { best, worst } = pickBestWorst();
-  out.push(`Your strongest area is ${best.label}. Use it as the anchor of your money plan instead of starting over each time.`);
-  out.push(`Your weakest area is ${worst.label}. Pick one small, specific habit this month that improves only that one number.`);
-  return out;
-}
-
-function showResults() {
-  const wealth = metrics.wealth;
-  document.getElementById('final-score').textContent = wealth;
-  document.getElementById('rating-badge').textContent = ratingFor(wealth);
-
-  const { best, worst } = pickBestWorst();
-  document.getElementById('best-cat').textContent = best.label;
-  document.getElementById('worst-cat').textContent = worst.label;
-
-  const goodPicks = picks.filter(p => p.good).length;
-  const story = `Across 12 life stages you made ${goodPicks} disciplined ` +
-    `choice${goodPicks === 1 ? '' : 's'} and ${STAGES.length - goodPicks} riskier one${(STAGES.length - goodPicks) === 1 ? '' : 's'}. ` +
-    `Your family wealth story ends as a ${ratingFor(wealth)}, anchored by ${best.label} ` +
-    `and held back most by ${worst.label}. The roadmap is never finished &mdash; small, ` +
-    `repeatable habits compound into a different ending each round.`;
-  document.getElementById('result-summary').innerHTML = story;
-
-  const ul = document.getElementById('result-lessons');
-  ul.innerHTML = '';
-  for (const l of lessonsFromPicks()) {
-    const li = document.createElement('li');
-    li.textContent = l;
-    ul.appendChild(li);
-  }
-
-  renderMetrics('metrics-grid-final');
-  show('screen-results');
-}
-
-document.getElementById('btn-start').addEventListener('click', () => {
-  resetGame(); renderStage(); show('screen-stage');
-});
-document.getElementById('btn-how').addEventListener('click', () => show('screen-how'));
-document.getElementById('btn-how-back').addEventListener('click', () => show('screen-home'));
-document.getElementById('btn-how-start').addEventListener('click', () => {
-  resetGame(); renderStage(); show('screen-stage');
-});
-document.getElementById('btn-next').addEventListener('click', goNext);
-document.getElementById('btn-restart').addEventListener('click', () => {
-  resetGame(); renderStage();
-});
-document.getElementById('btn-play-again').addEventListener('click', () => {
-  resetGame(); renderStage(); show('screen-stage');
-});
-document.getElementById('btn-results-home').addEventListener('click', () => {
-  show('screen-home');
-});
-
-resetGame();
+  // Android back button (called by MainActivity). Returns true when handled;
+  // false lets the app ask before exiting.
+  window.onAndroidBack = function () {
+    if (openSheetEl()) { closeSheets(); return true; }
+    if (window.gwrBack && window.gwrBack()) return true;
+    return false;
+  };
+})();
 </script>
 </body>
 </html>

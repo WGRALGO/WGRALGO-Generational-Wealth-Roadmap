@@ -3,7 +3,7 @@
 **App:** WGRALGO Generational Wealth Roadmap
 **Publisher:** WGRALGO &mdash; The Wealth Gap Resolution Algorithm&trade; Inc.
 **Package:** `org.wgralgo.generationalwealthroadmap`
-**Version:** 1.0.0
+**Version:** 2.0.0
 
 ## What this app collects
 
@@ -21,7 +21,7 @@
 
 ## Android permissions
 
-This APK does **not** declare the `INTERNET` permission. It also does not
+This APK does **not** declare the `INTERNET` permission (it is stripped from the final manifest). It also does not
 declare `ACCESS_NETWORK_STATE` or any tracking / analytics permissions.
 
 ## Local data
